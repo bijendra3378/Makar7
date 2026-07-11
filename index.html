@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title> Makar7- HD Passport Photo Maker</title>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #f5f5f5;
+}
+h1 {
+    margin-top: 20px;
+}
+.controls {
+    margin: 20px;
+}
+canvas {
+    background: white;
+    border: 1px solid black;
+    margin-top: 20px;
+    width: 300px; /* preview small */
+}
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+    <h1>Makar7</h1>
+<h1>Passport Photo Maker</h1>
+
+<div class="controls">
+    <input type="file" id="upload" accept="image/*"><br><br>
+
+    <button onclick="generate()">Generate</button>
+    <button onclick="printPage()">Print</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+</div>
+
+<!-- ✅ 300 DPI A4 Canvas -->
+<canvas id="canvas" width="2480" height="3508"></canvas>
+
+<script>
+let img = new Image();
+
+document.getElementById("upload").addEventListener("change", function(e){
+    const reader = new FileReader();
+    reader.onload = function(event){
+        img.src = event.target.result;
+    }
+    reader.readAsDataURL(e.target.files[0]);
+});
+
+async function generate() {
+    if (!img.src) {
+        alert("Upload image first");
+        return;
+    }
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // ✅ HD smoothing
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    // white background
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // ✅ 300 DPI conversion
+    let dpi = 300;
+    let width = (35 / 25.4) * dpi;   // 35mm
+    let height = (45 / 25.4) * dpi;  // 45mm
+
+    // face crop default
+    let faceX = 0, faceY = 0, faceW = img.width, faceH = img.height;
+
+    // ✅ Face detection (if supported)
+    if ('FaceDetector' in window) {
+        try {
+            const detector = new FaceDetector();
+            const faces = await detector.detect(img);
+            if (faces.length > 0) {
+                let f = faces[0].boundingBox;
+                faceX = f.x;
+                faceY = f.y;
+                faceW = f.width;
+                faceH = f.height;
+            }
+        } catch(e) {
+            console.log("Face detection failed");
+        }
+    }
+
+    // layout
+    let cols = 4;
+    let rows = 2;
+    let gap = 80;
+    let startX = 150;
+    let startY = 150;
+
+    for(let r = 0; r < rows; r++){
+        for(let c = 0; c < cols; c++){
+            let x = startX + c * (width + gap);
+            let y = startY + r * (height + gap);
+
+            ctx.drawImage(
+                img,
+                faceX, faceY, faceW, faceH,
+                x, y, width, height
+            );
+
+            ctx.strokeStyle = "black";
+            ctx.strokeRect(x, y, width, height);
+        }
+    }
+}
+
+// ✅ PRINT
+function printPage(){
+    let dataUrl = document.getElementById("canvas").toDataURL("image/jpeg", 1.0);
+    let win = window.open('');
+    win.document.write('<img src="'+dataUrl+'" style="width:100%" onload="window.print();window.close()">');
+}
+
+// ✅ HD PDF DOWNLOAD
+function downloadPDF(){
+    const { jsPDF } = window.jspdf;
+
+    let canvas = document.getElementById("canvas");
+
+    // high quality image
+    let imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+    let pdf = new jsPDF('p', 'mm', 'a4');
+
+    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+
+    pdf.save("passport_hd.pdf");
+}
+</script>
+
+</body>
+</html>
+
+

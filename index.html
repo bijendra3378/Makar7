@@ -6,596 +6,457 @@
     <meta name="google-site-verification" content="EY6Zad842ktm-smtiVoeq7Ya9vjKGKC9s6WAmS5smPY" />
     <title>MAKAR7 HD Passport Photo Maker</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
 
-        body{
-            min-height: 100vh;
+        body {
             background: linear-gradient(135deg, #07111f, #162447, #2563eb);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
-        .container{
+        .container {
             width: 100%;
             max-width: 1100px;
         }
 
-        .card{
-            background: rgba(255, 255, 255, .10);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, .18);
-            border-radius: 28px;
+        .card {
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
             padding: 30px;
-            box-shadow: 0 25px 60px rgba(0,0,0,.45);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .35);
         }
 
-        .header{
+        .header {
             text-align: center;
             color: #fff;
-            margin-bottom: 30px;
-        }
-
-        .header i{
-            font-size: 65px;
-            color: #60a5fa;
-        }
-
-        .header h1{
-            font-size: 42px;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        .header p{
-            opacity: .8;
-        }
-
-        .upload-box{
             margin-bottom: 25px;
         }
 
-        .upload-box label{
-            height: 170px;
-            border: 2px dashed rgba(255, 255, 255, .5);
-            border-radius: 20px;
+        .header i {
+            font-size: 60px;
+            color: #60a5fa;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            margin-top: 10px;
+        }
+
+        .header p {
+            opacity: .8;
+        }
+
+        .upload-box label {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #fff;
-            cursor: pointer;
-            transition: .3s;
-        }
-
-        .upload-box label:hover{
-            background: rgba(255, 255, 255, .12);
-        }
-
-        .upload-box i{
-            font-size: 50px;
-            margin-bottom: 10px;
-        }
-
-        .paper-section-label{
-            color: #fff;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 12px;
-            font-size: 16px;
-        }
-
-        .premium-paper-grid{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-            margin-bottom: 30px;
-            max-width: 500px;
-        }
-
-        .paper-card{
-            background: rgba(255, 255, 255, .06);
-            border: 1px solid rgba(255, 255, 255, .15);
-            border-radius: 12px;
-            padding: 10px 14px;
-            color: #fff;
-            text-align: center;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            transition: .3s;
-        }
-
-        .paper-card i{
-            font-size: 18px;
-            color: #a0aec0;
-        }
-
-        .paper-title{
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .paper-desc{
-            font-size: 11px;
-            opacity: .7;
-        }
-
-        .paper-card.active{
-            background: linear-gradient(135deg, rgba(37, 99, 235, .25), rgba(29, 78, 216, .4));
-            border-color: #60a5fa;
-            box-shadow: 0 0 15px rgba(96, 165, 250, .3);
-        }
-
-        .paper-card.active i{
-            color: #60a5fa;
-        }
-
-        .paper-card:hover{
-            background: rgba(255, 255, 255, .12);
-        }
-
-        .buttons{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .buttons button{
-            padding: 16px;
-            border: none;
-            border-radius: 15px;
-            color: #fff;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: .3s;
-        }
-
-        .buttons button:hover{
-            transform: translateY(-3px);
-        }
-
-        #generateBtn{
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-        }
-
-        #printBtn{
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-
-        #downloadBtn{
-            background: linear-gradient(135deg, #ef4444, #b91c1c);
-        }
-
-        .preview{
-            background: #fff;
-            border-radius: 20px;
-            padding: 20px;
-        }
-
-        .preview h2{
-            text-align: center;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        canvas{
-            width: 100%;
-            background: #fff;
-            border: 2px solid #ddd;
-            border-radius: 15px;
-            display: block;
-        }
-
-        .passport-settings{
-            margin-top: 25px;
-            padding: 20px;
+            height: 180px;
+            border: 2px dashed rgba(255, 255, 255, .5);
             border-radius: 18px;
+            color: #fff;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .upload-box label:hover {
             background: rgba(255, 255, 255, .08);
         }
 
-        .passport-settings h3{
+        .upload-box i {
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        #cropSection {
+            margin-top: 25px;
+        }
+
+        #cropSection h2 {
+            color: #fff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        #cropImage {
+            max-width: 100%;
+            display: block;
+            border-radius: 15px;
+            background: #fff;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .buttons button {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .buttons button:hover {
+            transform: translateY(-3px);
+        }
+
+        #generateBtn {
+            background: #2563eb;
+        }
+
+        #printBtn {
+            background: #f59e0b;
+        }
+
+        #downloadBtn {
+            background: #ef4444;
+        }
+
+        #zoomInBtn,
+        #zoomOutBtn,
+        #rotateLeftBtn,
+        #rotateRightBtn,
+        #cropApplyBtn {
+            background: #16a34a;
+        }
+
+        .preview {
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .preview h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        canvas {
+            width: 100%;
+            display: block;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            background: #fff;
+        }
+
+        .passport-settings {
+            margin-top: 25px;
+            background: rgba(255, 255, 255, .08);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .passport-settings h3 {
             color: #fff;
             margin-bottom: 15px;
         }
 
-        .setting-row{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+        .passport-settings label {
+            display: block;
             color: #fff;
+            margin-top: 15px;
+            margin-bottom: 8px;
         }
 
-        .setting-row select{
-            min-width: 150px;
+        .passport-settings select {
+            width: 100%;
             padding: 10px;
             border: none;
             border-radius: 10px;
-            background: #fff;
-            color: #333;
-            font-weight: 500;
         }
 
-        .status-box{
-            margin-top: 20px;
+        #status {
             text-align: center;
             color: #fff;
-            opacity: .85;
-        }
-
-        .footer{
             margin-top: 20px;
-            text-align: center;
-            color: #fff;
-            font-size: 14px;
         }
 
-        @media(max-width: 768px){
-            .card{
-                padding: 20px;
+        @media(max-width:768px) {
+            .card {
+                padding: 18px;
             }
-            .header h1{
-                font-size: 32px;
+
+            .header h1 {
+                font-size: 30px;
             }
-            .upload-box label{
-                height: 150px;
-            }
-            .buttons{
+
+            .buttons {
                 grid-template-columns: 1fr;
-            }
-            .premium-paper-grid{
-                grid-template-columns: 1fr 1fr;
-                max-width: 100%;
-            }
-            .setting-row{
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            .setting-row select{
-                width: 100%;
-            }
-            canvas{
-                width: 100%;
-                height: auto;
             }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="card">
-        <div class="header">
-            <i class="fa-solid fa-camera"></i>
-            <h1>MAKAR7</h1>
-            <p>Professional HD Passport Photo Maker</p>
-        </div>
-
-        <div class="upload-box">
-            <label for="upload">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                <h2>Upload Photo</h2>
-                <span>JPG / PNG Image</span>
-            </label>
-            <input type="file" id="upload" accept="image/*" hidden>
-        </div>
-
-        <span class="paper-section-label">
-            <i class="fa-solid fa-layer-group"></i> Select Paper Size
-        </span>
-
-        <div class="premium-paper-grid">
-            <div class="paper-card active" data-value="a4">
-                <i class="fa-solid fa-file-lines"></i>
-                <span class="paper-title">A4 Portrait</span>
-                <span class="paper-desc">Standard Print</span>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <i class="fa-solid fa-camera"></i>
+                <h1>MAKAR7</h1>
+                <p>Professional HD Passport Photo Maker</p>
             </div>
-            <div class="paper-card" data-value="4x6">
-                <i class="fa-solid fa-image"></i>
-                <span class="paper-title">4 × 6 Paper</span>
-                <span class="paper-desc">Photo Card</span>
+
+            <div class="upload-box">
+                <label for="upload">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <h2>Upload Photo</h2>
+                    <p>Select JPG / PNG</p>
+                </label>
+                <input type="file" id="upload" accept="image/*" hidden>
             </div>
-        </div>
 
-        <div class="buttons">
-            <button id="generateBtn">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                Generate 8 Photos
-            </button>
-            <button id="printBtn">
-                <i class="fa-solid fa-print"></i>
-                Print
-            </button>
-            <button id="downloadBtn">
-                <i class="fa-solid fa-file-pdf"></i>
-                Download PDF
-            </button>
-        </div>
+            <div id="cropSection" style="display:none;">
+                <h2>Crop Photo</h2>
+                <img id="cropImage">
+                <div class="buttons">
+                    <button id="zoomInBtn"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom +</button>
+                    <button id="zoomOutBtn"><i class="fa-solid fa-magnifying-glass-minus"></i> Zoom -</button>
+                    <button id="rotateLeftBtn"><i class="fa-solid fa-rotate-left"></i> Left</button>
+                    <button id="rotateRightBtn"><i class="fa-solid fa-rotate-right"></i> Right</button>
+                    <button id="cropApplyBtn"><i class="fa-solid fa-crop"></i> Apply Crop</button>
+                </div>
+            </div>
 
-        <div class="preview">
-            <h2>Preview</h2>
-            <canvas id="canvas" width="2480" height="3508"></canvas>
-        </div>
+            <div class="buttons">
+                <button id="generateBtn">Generate 8 Photos</button>
+                <button id="printBtn">Print</button>
+                <button id="downloadBtn">Download PDF</button>
+            </div>
 
-        <div class="passport-settings">
-            <h3>Passport Photo Settings</h3>
-            <div class="setting-row">
+            <div class="preview">
+                <h2>Preview</h2>
+                <canvas id="canvas" width="1800" height="1200"></canvas>
+            </div>
+
+            <div class="passport-settings">
+                <h3>Settings</h3>
                 <label>Photo Quality</label>
                 <select id="quality">
                     <option value="300">HD 300 DPI</option>
                     <option value="600">Ultra HD 600 DPI</option>
                 </select>
-            </div>
-            <div class="setting-row">
-                <label>Photo Border</label>
+
+                <label>Border</label>
                 <select id="borderSelect">
-                    <option value="yes">Enable Border</option>
-                    <option value="no">Disable Border</option>
+                    <option value="yes">Enable</option>
+                    <option value="no">Disable</option>
                 </select>
             </div>
-        </div>
 
-        <div class="status-box">
-            <p id="status">Ready to create passport photo</p>
-        </div>
-
-        <div class="footer">
-            <p>© 2026 MAKAR7 HD Passport Photo Maker</p>
+            <p id="status">Ready</p>
         </div>
     </div>
-</div>
 
-<script>
-    const upload = document.getElementById("upload");
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 
-    const generateBtn = document.getElementById("generateBtn");
-    const printBtn = document.getElementById("printBtn");
-    const downloadBtn = document.getElementById("downloadBtn");
+    <script>
+        const upload = document.getElementById("upload");
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
 
-    const quality = document.getElementById("quality");
-    const borderSelect = document.getElementById("borderSelect");
-    const status = document.getElementById("status");
+        const cropSection = document.getElementById("cropSection");
+        const cropImage = document.getElementById("cropImage");
 
-    const paperCards = document.querySelectorAll(".paper-card");
+        const zoomInBtn = document.getElementById("zoomInBtn");
+        const zoomOutBtn = document.getElementById("zoomOutBtn");
+        const rotateLeftBtn = document.getElementById("rotateLeftBtn");
+        const rotateRightBtn = document.getElementById("rotateRightBtn");
+        const cropApplyBtn = document.getElementById("cropApplyBtn");
 
-    let img = new Image();
-    let selectedPaper = "a4";
-    let borderValue = "yes";
+        const generateBtn = document.getElementById("generateBtn");
+        const quality = document.getElementById("quality");
+        const borderSelect = document.getElementById("borderSelect");
+        const status = document.getElementById("status");
 
-    let zoom = 1;
-    let photoX = 0;
-    let photoY = 0;
+        const printBtn = document.getElementById("printBtn");
+        const downloadBtn = document.getElementById("downloadBtn");
 
-    const bgColor = "#ffffff";
+        let cropper;
+        let img = new Image();
+        
+        // Background Process maintains 4x6 strictly
+        const selectedPaper = "4x6"; 
 
-    // Canvas Default Setup
-    canvas.width = 2480;
-    canvas.height = 3508;
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Upload Image
+        upload.addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
 
-    // Paper Selection Event
-    paperCards.forEach(card => {
-        card.addEventListener("click", () => {
-            paperCards.forEach(c => c.classList.remove("active"));
-            card.classList.add("active");
-            selectedPaper = card.dataset.value;
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                cropSection.style.display = "block";
+                cropImage.src = event.target.result;
 
-            if (selectedPaper == "a4") {
-                canvas.width = 2480;
-                canvas.height = 3508;
-            } else {
-                canvas.width = 1800;
-                canvas.height = 1200;
-            }
-            drawPreview();
-        });
-    });
-
-    // Border Option Change
-    borderSelect.onchange = function () {
-        borderValue = this.value;
-        if (img.src) {
-            generateBtn.click();
-        }
-    };
-
-    // File Upload Logic
-    upload.onchange = function (e) {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function (ev) {
-            img.onload = function () {
-                photoX = 0;
-                photoY = 0;
-                zoom = 1;
-                drawPreview();
+                cropImage.onload = function () {
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: 35 / 45,
+                        viewMode: 1,
+                        autoCropArea: 1,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: true,
+                        scalable: true,
+                        responsive: true
+                    });
+                };
             };
-            img.src = ev.target.result;
+            reader.readAsDataURL(file);
+        });
+
+        // Zoom In
+        zoomInBtn.onclick = function () {
+            if (cropper) cropper.zoom(0.1);
         };
-        reader.readAsDataURL(file);
-    };
 
-    // Render Preview
-    function drawPreview() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = bgColor;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Zoom Out
+        zoomOutBtn.onclick = function () {
+            if (cropper) cropper.zoom(-0.1);
+        };
 
-        if (!img.src) return;
+        // Rotate Left
+        rotateLeftBtn.onclick = function () {
+            if (cropper) cropper.rotate(-90);
+        };
 
-        let scale = Math.min(
-            (canvas.width - 300) / img.width,
-            (canvas.height - 300) / img.height
-        ) * zoom;
+        // Rotate Right
+        rotateRightBtn.onclick = function () {
+            if (cropper) cropper.rotate(90);
+        };
 
-        let w = img.width * scale;
-        let h = img.height * scale;
-        let x = (canvas.width - w) / 2 + photoX;
-        let y = (canvas.height - h) / 2 + photoY;
+        // Apply Crop
+        cropApplyBtn.onclick = function () {
+            if (!cropper) return;
 
-        ctx.drawImage(img, x, y, w, h);
-    }
+            const croppedCanvas = cropper.getCroppedCanvas({
+                width: 700,
+                height: 900,
+                imageSmoothingQuality: "high"
+            });
 
-    // Border Helper
-    function drawBorder(x, y, w, h) {
-        if (borderValue == "yes") {
-            ctx.strokeStyle = "#777";
-            ctx.lineWidth = 3;
-            ctx.strokeRect(x, y, w, h);
-        }
-    }
+            img.onload = function () {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 100, 100, 700, 900);
+            };
+            img.src = croppedCanvas.toDataURL("image/png");
 
-    // ===== Canvas Drag Interaction =====
-    let dragging = false;
-    let startX = 0;
-    let startY = 0;
+            cropSection.style.display = "none";
+            status.innerText = "Photo cropped successfully. Click 'Generate 8 Photos' below.";
+        };
 
-    canvas.addEventListener("mousedown", function (e) {
-        if (!img.src) return;
-        dragging = true;
-        startX = e.offsetX;
-        startY = e.offsetY;
-    });
+        // Generate Grid (Processes 4x6 Canvas layout automatically)
+        generateBtn.onclick = function () {
+            if (!img.src) {
+                alert("Please upload and crop a photo first.");
+                return;
+            }
 
-    canvas.addEventListener("mousemove", function (e) {
-        if (!dragging) return;
+            const dpi = parseInt(quality.value);
+            const photoW = (35 / 25.4) * dpi;
+            const photoH = (45 / 25.4) * dpi;
 
-        // Proper positioning responsive scaling support
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
+            const cols = 4;
+            const rows = 2;
+            const gap = 40;
 
-        photoX += (e.offsetX - startX) * scaleX;
-        photoY += (e.offsetY - startY) * scaleY;
-
-        startX = e.offsetX;
-        startY = e.offsetY;
-
-        drawPreview();
-    });
-
-    canvas.addEventListener("mouseup", () => dragging = false);
-    canvas.addEventListener("mouseleave", () => dragging = false);
-
-    // ===== Generate 8 Photos Logic =====
-    generateBtn.onclick = function () {
-        if (!img.src) {
-            alert("Upload Photo First");
-            return;
-        }
-
-        if (selectedPaper == "a4") {
-            canvas.width = 2480;
-            canvas.height = 3508;
-        } else {
+            // Dimensions structured for 4x6 Sheet layout
             canvas.width = 1800;
             canvas.height = 1200;
-        }
 
-        ctx.fillStyle = bgColor;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        const dpi = parseInt(quality.value);
-        const photoW = (35 / 25.4) * dpi;
-        const photoH = (45 / 25.4) * dpi;
+            const totalWidth = cols * photoW + (cols - 1) * gap;
+            
+            const startX = (canvas.width - totalWidth) / 2;
+            // startY को 100 से घटाकर 70 किया गया है ताकि फ़ोटो ऊपर की तरफ शिफ्ट हो जाएँ
+            const startY = 70; 
 
-        const gap = 40;
-        const cols = 4;
-        const rows = 2;
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    let x = startX + c * (photoW + gap);
+                    let y = startY + r * (photoH + gap);
 
-        const totalWidth = cols * photoW + (cols - 1) * gap;
-        const startX = (canvas.width - totalWidth) / 2;
-        const startY = selectedPaper == "a4" ? 180 : 80;
+                    ctx.drawImage(img, x, y, photoW, photoH);
 
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                let x = startX + c * (photoW + gap);
-                let y = startY + r * (photoH + gap);
-
-                ctx.fillStyle = "#fff";
-                ctx.fillRect(x, y, photoW, photoH);
-
-                const margin = 18;
-                const innerW = photoW - margin * 2;
-                const innerH = photoH - margin * 2;
-
-                let scale = Math.min(innerW / img.width, innerH / img.height) * zoom;
-                let w = img.width * scale;
-                let h = img.height * scale;
-
-                ctx.drawImage(
-                    img,
-                    x + margin + (innerW - w) / 2 + photoX,
-                    y + margin + (innerH - h) / 2 + photoY,
-                    w,
-                    h
-                );
-
-                drawBorder(x, y, photoW, photoH);
+                    if (borderSelect.value === "yes") {
+                        ctx.strokeStyle = "#666";
+                        ctx.lineWidth = 3;
+                        ctx.strokeRect(x, y, photoW, photoH);
+                    }
+                }
             }
-        }
-        status.innerText = "8 Photos Generated Successfully!";
-    };
+            status.innerText = "8 Passport Photos Generated Successfully.";
+        };
 
-    // ===== Print Logic =====
-    printBtn.onclick = function () {
-        if (!img.src) {
-            alert("Generate grid first before printing.");
-            return;
-        }
-        const image = canvas.toDataURL("image/jpeg", 1);
-        const win = window.open("");
-        win.document.write(
-            `<body style="margin:0;"><img src="${image}" style="width:100vw; height:auto;" onload="window.print();window.close()"></body>`
-        );
-    };
+        // Print Functionality
+        printBtn.onclick = function () {
+            if (!img.src) {
+                alert("Generate photos first.");
+                return;
+            }
 
-    // ===== PDF Download Logic =====
-    downloadBtn.onclick = function () {
-        if (!img.src) {
-            alert("Generate grid first before downloading PDF.");
-            return;
-        }
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({
-            orientation: selectedPaper == "a4" ? "portrait" : "landscape",
-            unit: "mm",
-            format: selectedPaper == "a4" ? "a4" : [102, 152]
-        });
+            const image = canvas.toDataURL("image/jpeg", 1);
+            const win = window.open("");
+            win.document.write(`
+                <html>
+                <head><title>Print</title></head>
+                <body style="margin:0;">
+                <img src="${image}" style="width:100%;">
+                <script>
+                window.onload=function(){
+                    window.print();
+                    window.close();
+                }
+                <\/script>
+                </body>
+                </html>
+            `);
+        };
 
-        const image = canvas.toDataURL("image/jpeg", 1);
+        // Download PDF Functionality (Processes 4x6 landscape document)
+        downloadBtn.onclick = function () {
+            if (!img.src) {
+                alert("Generate photos first.");
+                return;
+            }
 
-        if (selectedPaper == "a4") {
-            pdf.addImage(image, "JPEG", 0, 0, 210, 297);
-        } else {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: "landscape",
+                unit: "mm",
+                format: [102, 152] 
+            });
+
+            const image = canvas.toDataURL("image/jpeg", 1);
             pdf.addImage(image, "JPEG", 0, 0, 152, 102);
-        }
-
-        pdf.save("MAKAR7-HD-Passport-Photo.pdf");
-    };
-</script>
-
+            pdf.save("MAKAR7-HD-Passport-Photo.pdf");
+        };
+    </script>
 </body>
 </html>

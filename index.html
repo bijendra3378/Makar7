@@ -1,207 +1,335 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="EY6Zad842ktm-smtiVoeq7Ya9vjKGKC9s6WAmS5smPY" />
-    <title>MAKAR7 - HD Passport Photo Maker</title>
+    <title>MAKAR7 HD Passport Photo Maker</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        /* --- CSS STYLES --- */
-        *{
+        /* ===== MAKAR7 PREMIUM PASSPORT PHOTO MAKER CSS ===== */
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
 
-        body{
+        body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #0B1220, #16213E, #2563EB);
+            background: linear-gradient(135deg, #07111f, #162447, #2563eb);
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
-        .container{
+        .container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1100px;
         }
 
-        .card{
-            background: rgba(255, 255, 255, .10);
+        .card {
+            background: rgba(255, 255, 255, 0.10);
             backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, .18);
-            border-radius: 25px;
+            border-radius: 28px;
             padding: 30px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, .40);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, .45);
         }
 
-        .header{
+        /* HEADER */
+        .header {
             text-align: center;
-            color: #fff;
+            color: white;
             margin-bottom: 30px;
         }
 
-        .header i{
-            font-size: 60px;
-            color: #60A5FA;
-            margin-bottom: 10px;
+        .header i {
+            font-size: 65px;
+            color: #60a5fa;
         }
 
-        .header h1{
-            font-size: 38px;
+        .header h1 {
+            font-size: 42px;
             font-weight: 700;
+            letter-spacing: 2px;
         }
 
-        .header p{
-            margin-top: 8px;
-            opacity: .9;
+        .header p {
+            opacity: .8;
         }
 
-        .upload-box{
+        /* UPLOAD */
+        .upload-box {
             margin-bottom: 25px;
         }
 
-        .upload-box label{
+        .upload-box label {
+            height: 170px;
+            border: 2px dashed rgba(255, 255, 255, .5);
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 170px;
-            border: 2px dashed rgba(255, 255, 255, .5);
-            border-radius: 20px;
+            color: white;
             cursor: pointer;
-            color: #fff;
             transition: .3s;
         }
 
-        .upload-box label:hover{
-            background: rgba(255, 255, 255, .08);
+        .upload-box label:hover {
+            background: rgba(255, 255, 255, .12);
         }
 
-        .upload-box i{
+        .upload-box i {
             font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        /* PREMIUM PAPER SELECTOR GRID - Optimized & Smaller Design */
+        .paper-section-label {
+            color: white;
+            font-weight: 600;
             margin-bottom: 12px;
+            display: block;
+            font-size: 16px;
+            letter-spacing: 0.5px;
         }
 
-        .upload-box span{
-            margin-top: 10px;
-            opacity: .8;
+        .premium-paper-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+            max-width: 500px; /* Restricts sizes to keep it compact */
         }
 
-        /* Hidden from website */
-        .details{
-            display: none;
-        }
-
-        .buttons{
+        .paper-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 10px 14px; /* Reduced padding for compact look */
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .paper-card i {
+            font-size: 18px; /* Slightly smaller icon */
+            color: #a0aec0;
+            transition: color 0.3s ease;
+        }
+
+        .paper-card .paper-title {
+            font-weight: 600;
+            font-size: 13px; /* Smaller text */
+        }
+
+        .paper-card .paper-desc {
+            font-size: 11px; /* Smaller text */
+            opacity: 0.6;
+        }
+
+        /* Active State for Premium Paper Cards */
+        .paper-card.active {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(29, 78, 216, 0.4));
+            border-color: #60a5fa;
+            box-shadow: 0 0 15px rgba(96, 165, 250, 0.3);
+        }
+
+        .paper-card.active i {
+            color: #60a5fa;
+        }
+
+        .paper-card:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* MAIN BUTTONS */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            flex-wrap: wrap;
             margin-bottom: 25px;
         }
 
-        .buttons button{
-            padding: 15px 25px;
+        .buttons button {
+            padding: 16px;
             border: none;
             border-radius: 15px;
             cursor: pointer;
-            color: #fff;
+            color: white;
             font-size: 16px;
             font-weight: 600;
-            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             transition: .3s;
         }
 
-        .buttons button:hover{
-            transform: translateY(-4px);
-            box-shadow: 0 12px 25px rgba(37, 99, 235, .4);
+        .buttons button:hover {
+            transform: translateY(-3px);
         }
 
-        .preview{
-            background: #fff;
+        #generateBtn {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        }
+
+        #downloadBtn {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+        }
+
+        #printBtn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        /* PREVIEW */
+        .preview {
+            background: white;
             border-radius: 20px;
             padding: 20px;
         }
 
-        .preview h2{
+        .preview h2 {
             text-align: center;
             margin-bottom: 15px;
         }
 
-        canvas{
+        canvas {
             width: 100%;
-            height: auto;
+            border-radius: 15px;
             border: 2px solid #ddd;
-            border-radius: 12px;
-            background: #fff;
+            background: white;
         }
 
-        @media(max-width: 768px){
-            .card{
+        /* PASSPORT SETTINGS */
+        .passport-settings {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .08);
+        }
+
+        .passport-settings h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .setting-row select {
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            min-width: 150px;
+            background: white;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* STATUS */
+        .status-box {
+            margin-top: 20px;
+            text-align: center;
+            color: white;
+            opacity: .8;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        /* MOBILE RESPONSIVENESS */
+        @media(max-width:768px) {
+            .card {
                 padding: 20px;
             }
-            .header h1{
-                font-size: 30px;
+
+            .header h1 {
+                font-size: 32px;
             }
-            .buttons{
+
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .setting-row {
                 flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
-            .buttons button{
+            
+            .setting-row select {
                 width: 100%;
             }
-            .upload-box label{
+
+            .upload-box label {
                 height: 150px;
+            }
+            
+            .premium-paper-grid {
+                max-width: 100%;
             }
         }
     </style>
 </head>
+
 <body>
 
     <div class="container">
         <div class="card">
-            
             <div class="header">
                 <i class="fa-solid fa-camera"></i>
                 <h1>MAKAR7</h1>
-                <p>HD Passport Photo Maker</p>
+                <p>Professional HD Passport Photo Maker</p>
             </div>
 
             <div class="upload-box">
                 <label for="upload">
                     <i class="fa-solid fa-cloud-arrow-up"></i>
-                    <h2>Upload Passport Photo</h2>
-                    <span>Click Here</span>
+                    <h2>Upload Photo</h2>
+                    <span>JPG / PNG Image</span>
                 </label>
                 <input type="file" id="upload" accept="image/*" hidden>
             </div>
 
-            <div class="details">
-                <div class="box">
-                    <i class="fa-solid fa-file"></i>
-                    <b>Paper Size</b>
-                    <span>A4 (210 × 297 mm)</span>
+            <span class="paper-section-label"><i class="fa-solid fa-layer-group"></i> Select Paper Size</span>
+            <div class="premium-paper-grid">
+                <div class="paper-card active" data-value="a4">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span class="paper-title">A4 Portrait</span>
+                    <span class="paper-desc">Standard Print</span>
                 </div>
-                <div class="box">
+                <div class="paper-card" data-value="4x6">
                     <i class="fa-solid fa-image"></i>
-                    <b>Photo Size</b>
-                    <span>35 × 45 mm</span>
+                    <span class="paper-title">4 × 6 Paper</span>
+                    <span class="paper-desc">Photo Card</span>
                 </div>
             </div>
 
             <div class="buttons">
                 <button id="generateBtn">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> Generate
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Generate 8 Photos
                 </button>
                 <button id="printBtn">
                     <i class="fa-solid fa-print"></i> Print
@@ -212,142 +340,267 @@
             </div>
 
             <div class="preview">
-                <h2>A4 Preview</h2>
+                <h2>Preview</h2>
                 <canvas id="canvas" width="2480" height="3508"></canvas>
             </div>
 
+            <div class="passport-settings">
+                <h3>Passport Photo Settings</h3>
+                <div class="setting-row">
+                    <label>Photo Quality</label>
+                    <select id="quality">
+                        <option value="300">HD 300 DPI</option>
+                        <option value="600">Ultra HD 600 DPI</option>
+                    </select>
+                </div>
+                <!-- BORDER CONTROLS ADDED HERE -->
+                <div class="setting-row">
+                    <label>Photo Border</label>
+                    <select id="borderSelect">
+                        <option value="yes">Enable Border</option>
+                        <option value="no">Disable Border</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="status-box">
+                <p id="status">Ready to create passport photo</p>
+            </div>
+
+            <div class="footer">
+                <p>© 2026 MAKAR7 HD Passport Photo Maker</p>
+            </div>
         </div>
     </div>
 
     <script>
+        // Elements
         const upload = document.getElementById("upload");
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
+        const paperCards = document.querySelectorAll(".paper-card");
+        const borderSelect = document.getElementById("borderSelect");
 
-        const generateBtn = document.getElementById("generateBtn");
-        const printBtn = document.getElementById("printBtn");
-        const downloadBtn = document.getElementById("downloadBtn");
-
+        // App State
+        const defaultBgColor = "#ffffff"; 
+        let borderValue = "yes";        // Real-time border tracker linked to dropdown
+        let selectedPaper = "a4";        
+        let zoom = 1.0;                  
         let img = new Image();
+        let photoX = 0;
+        let photoY = 0;
+        let originalImage = "";
 
-        upload.addEventListener("change", function(e){
+        // Listen for border selection changes
+        borderSelect.addEventListener("change", function() {
+            borderValue = this.value;
+            // Re-trigger generate logic dynamically if an image is already uploaded
+            if (img.src) {
+                document.getElementById("generateBtn").click();
+            }
+        });
+
+        // Premium Paper Card Selection Logic
+        paperCards.forEach(card => {
+            card.addEventListener("click", function() {
+                paperCards.forEach(c => c.classList.remove("active"));
+                this.classList.add("active");
+                selectedPaper = this.getAttribute("data-value");
+                
+                if (selectedPaper === "a4") {
+                    canvas.width = 2480;
+                    canvas.height = 3508;
+                } else {
+                    canvas.width = 1800;
+                    canvas.height = 1200;
+                }
+                drawPreview();
+            });
+        });
+
+        // Upload Photo
+        upload.addEventListener("change", function(e) {
             const file = e.target.files[0];
-            if(!file) return;
+            if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(event){
-                img.onload = function(){
-                    preview();
-                }
+            reader.onload = function(event) {
+                originalImage = event.target.result;
+                img.onload = function() {
+                    resetPosition();
+                    drawPreview();
+                };
                 img.src = event.target.result;
-            }
+            };
             reader.readAsDataURL(file);
         });
 
-        // Preview Function
-        function preview(){
-            ctx.fillStyle = "#ffffff";
+        // Reset Position
+        function resetPosition() {
+            photoX = 0;
+            photoY = 0;
+            zoom = 1.0;
+        }
+
+        // Draw Interactive Preview Layout
+        function drawPreview() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = defaultBgColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            const scale = Math.min(
+            if (!img.src) return;
+
+            let scale = Math.min(
                 (canvas.width - 300) / img.width,
                 (canvas.height - 300) / img.height
-            );
+            ) * zoom;
 
-            const w = img.width * scale;
-            const h = img.height * scale;
+            let w = img.width * scale;
+            let h = img.height * scale;
 
-            const x = (canvas.width - w) / 2;
-            const y = (canvas.height - h) / 2;
+            let x = (canvas.width - w) / 2 + photoX;
+            let y = (canvas.height - h) / 2 + photoY;
 
             ctx.drawImage(img, x, y, w, h);
         }
 
-        // Generate Passport Grid
-        generateBtn.addEventListener("click", async () => {
-            if(!img.src){
-                alert("Please Upload Image");
+        // PASSPORT BORDER HELPER
+        function drawBorder(x, y, w, h) {
+            if (borderValue === "yes") {
+                ctx.strokeStyle = "#777";
+                ctx.lineWidth = 3;
+                ctx.strokeRect(x, y, w, h);
+            }
+        }
+
+        // MOUSE/TOUCH DRAG PHOTO
+        let dragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        canvas.addEventListener("mousedown", function(e) {
+            dragging = true;
+            startX = e.offsetX;
+            startY = e.offsetY;
+        });
+
+        canvas.addEventListener("mousemove", function(e) {
+            if (!dragging) return;
+            let moveX = e.offsetX - startX;
+            let moveY = e.offsetY - startY;
+
+            photoX += moveX;
+            photoY += moveY;
+
+            startX = e.offsetX;
+            startY = e.offsetY;
+            drawPreview();
+        });
+
+        canvas.addEventListener("mouseup", function() { dragging = false; });
+        canvas.addEventListener("mouseleave", function() { dragging = false; });
+
+        canvas.addEventListener("touchmove", function(e) {
+            let touch = e.touches[0];
+            photoX += touch.movementX || 0;
+            photoY += touch.movementY || 0;
+            drawPreview();
+        });
+
+        // GENERATE 8 PASSPORT PHOTOS
+        const generateBtn = document.getElementById("generateBtn");
+
+        generateBtn.onclick = function() {
+            if (!img.src) {
+                alert("Upload Photo First");
                 return;
             }
 
-            ctx.fillStyle = "#fff";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = "high";
-
-            const dpi = 300;
-            const photoWidth = (35 / 25.4) * dpi;
-            const photoHeight = (45 / 25.4) * dpi;
-
-            let sx = 0;
-            let sy = 0;
-            let sw = img.width;
-            let sh = img.height;
-
-            // Optional Experimental Face Detection
-            if("FaceDetector" in window){
-                try{
-                    const detector = new FaceDetector();
-                    const faces = await detector.detect(img);
-                    if(faces.length){
-                        const face = faces[0].boundingBox;
-                        sx = face.x;
-                        sy = face.y;
-                        sw = face.width;
-                        sh = face.height;
-                    }
-                }catch(e){}
+            if (selectedPaper === "a4") {
+                canvas.width = 2480;
+                canvas.height = 3508;
+            } else {
+                canvas.width = 1800;
+                canvas.height = 1200;
             }
 
+            ctx.fillStyle = defaultBgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const dpi = parseInt(document.getElementById("quality").value) || 300;
+            
+            const photoW = (35 / 25.4) * dpi;
+            const photoH = (45 / 25.4) * dpi;
+            
+            const gap = 40;
             const cols = 4;
-            const rows = 2;
-            const gap = 70;
+            const rows = 2; 
 
-            const totalWidth = (cols * photoWidth) + ((cols - 1) * gap);
+            const totalWidth = (cols * photoW) + ((cols - 1) * gap);
             const startX = (canvas.width - totalWidth) / 2;
-            const startY = 250; 
+            const startY = selectedPaper === "a4" ? 180 : 80;
 
-            for(let r = 0; r < rows; r++){
-                for(let c = 0; c < cols; c++){
-                    const x = startX + c * (photoWidth + gap);
-                    const y = startY + r * (photoHeight + gap);
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    let x = startX + c * (photoW + gap);
+                    let y = startY + r * (photoH + gap);
+
+                    ctx.fillStyle = defaultBgColor;
+                    ctx.fillRect(x, y, photoW, photoH);
+
+                    let scale = Math.min(photoW / img.width, photoH / img.height) * zoom;
+                    let w = img.width * scale;
+                    let h = img.height * scale;
 
                     ctx.drawImage(
                         img,
-                        sx, sy, sw, sh,
-                        x, y, photoWidth, photoHeight
+                        x + (photoW - w) / 2 + photoX,
+                        y + (photoH - h) / 2 + photoY,
+                        w,
+                        h
                     );
 
-                    ctx.strokeStyle = "#777";
-                    ctx.lineWidth = 2;
-                    ctx.strokeRect(x, y, photoWidth, photoHeight);
+                    drawBorder(x, y, photoW, photoH);
                 }
             }
-        });
+            document.getElementById("status").innerText = "8 Photos Generated Successfully!";
+        };
 
-        // Print Function
-        printBtn.addEventListener("click", () => {
-            const image = canvas.toDataURL("image/jpeg", 1);
-            const win = window.open("");
-            win.document.write(`
-                <img src="${image}" style="width:100%" onload="window.print();window.close()">
-            `);
-        });
+        // PRINT ACTION
+        const printBtn = document.getElementById("printBtn");
+        printBtn.onclick = function() {
+            let image = canvas.toDataURL("image/jpeg", 1);
+            let win = window.open("");
+            win.document.write(`<img src="${image}" style="width:100%" onload="window.print();window.close()">`);
+        };
 
-        // Download PDF Function
-        downloadBtn.addEventListener("click", () => {
+        // PDF DOWNLOAD ACTION
+        const downloadBtn = document.getElementById("downloadBtn");
+        downloadBtn.onclick = function() {
             const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({
-                orientation: "portrait",
+            let pdf = new jsPDF({
+                orientation: selectedPaper === "a4" ? "portrait" : "landscape",
                 unit: "mm",
-                format: "a4"
+                format: selectedPaper === "a4" ? "a4" : [102, 152]
             });
 
-            const image = canvas.toDataURL("image/jpeg", 1);
-            pdf.addImage(image, "JPEG", 0, 0, 210, 297);
-            pdf.save("Makar7-HD-Passport-Photo-A4.pdf");
-        });
+            let image = canvas.toDataURL("image/jpeg", 1);
+
+            if (selectedPaper === "a4") {
+                pdf.addImage(image, "JPEG", 0, 0, 210, 297);
+            } else {
+                pdf.addImage(image, "JPEG", 0, 0, 152, 102);
+            }
+            pdf.save("MAKAR7-HD-Passport-Photo.pdf");
+        };
+
+        // AUTO START
+        canvas.width = 2480;
+        canvas.height = 3508;
+        ctx.fillStyle = defaultBgColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     </script>
 </body>
+
 </html>
+

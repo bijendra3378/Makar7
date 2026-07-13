@@ -1,2 +1,2 @@
-# Makar7-
+# Makar7
 Passport size photo maker

@@ -1,4 +1,4 @@
-import base64
+base64
 import io
 import os
 from flask import Flask, request, jsonify, render_template
@@ -61,9 +61,3 @@ def remove_background():
         return jsonify({
             "success": False,
             "message": str(e)
-        }), 500
-
-if __name__ == '__main__':
-    # Render system server architecture dynamic port binding
-    port = int(os.environ.get("PORT", 39696))
-    app.run(host='0.0.0.0', port=port)

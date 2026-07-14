@@ -2,69 +2,458 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MAKAR7 Final Fix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="EY6Zad842ktm-smtiVoeq7Ya9vjKGKC9s6WAmS5smPY" />
+    <title>MAKAR7 HD Passport Photo Maker</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <style>
-        body { background: #0f2027; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
-        .container { background: #1c2833; padding: 20px; border-radius: 20px; max-width: 450px; margin: auto; }
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 20px; background: white; padding: 10px; }
-        .thumb { width: 100%; height: auto; border: 1px solid #ccc; }
-        button { padding: 10px 20px; cursor: pointer; border-radius: 5px; border: none; margin: 5px; font-weight: bold; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #07111f, #162447, #2563eb);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .35);
+        }
+
+        .header {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 25px;
+        }
+
+        .header i {
+            font-size: 60px;
+            color: #60a5fa;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            margin-top: 10px;
+        }
+
+        .header p {
+            opacity: .8;
+        }
+
+        .upload-box label {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 180px;
+            border: 2px dashed rgba(255, 255, 255, .5);
+            border-radius: 18px;
+            color: #fff;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .upload-box label:hover {
+            background: rgba(255, 255, 255, .08);
+        }
+
+        .upload-box i {
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        #cropSection {
+            margin-top: 25px;
+        }
+
+        #cropSection h2 {
+            color: #fff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        #cropImage {
+            max-width: 100%;
+            display: block;
+            border-radius: 15px;
+            background: #fff;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .buttons button {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .buttons button:hover {
+            transform: translateY(-3px);
+        }
+
+        #generateBtn {
+            background: #2563eb;
+        }
+
+        #printBtn {
+            background: #f59e0b;
+        }
+
+        #downloadBtn {
+            background: #ef4444;
+        }
+
+        #zoomInBtn,
+        #zoomOutBtn,
+        #rotateLeftBtn,
+        #rotateRightBtn,
+        #cropApplyBtn {
+            background: #16a34a;
+        }
+
+        .preview {
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .preview h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        canvas {
+            width: 100%;
+            display: block;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            background: #fff;
+        }
+
+        .passport-settings {
+            margin-top: 25px;
+            background: rgba(255, 255, 255, .08);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .passport-settings h3 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .passport-settings label {
+            display: block;
+            color: #fff;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .passport-settings select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+        }
+
+        #status {
+            text-align: center;
+            color: #fff;
+            margin-top: 20px;
+        }
+
+        @media(max-width:768px) {
+            .card {
+                padding: 18px;
+            }
+
+            .header h1 {
+                font-size: 30px;
+            }
+
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>MAKAR7 HD</h2>
-        <input type="file" id="fileInput">
-        <br><br>
-        <button onclick="generate()">Generate 8 Photos</button>
-        <button onclick="downloadPDF()">Download PDF</button>
 
-        <div id="grid-container" class="grid"></div>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <i class="fa-solid fa-camera"></i>
+                <h1>MAKAR7</h1>
+                <p>Professional HD Passport Photo Maker</p>
+            </div>
+
+            <div class="upload-box">
+                <label for="upload">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <h2>Upload Photo</h2>
+                    <p>Select JPG / PNG</p>
+                </label>
+                <input type="file" id="upload" accept="image/*" hidden>
+            </div>
+
+            <div id="cropSection" style="display:none;">
+                <h2>Crop Photo</h2>
+                <img id="cropImage">
+                <div class="buttons">
+                    <button id="zoomInBtn"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom +</button>
+                    <button id="zoomOutBtn"><i class="fa-solid fa-magnifying-glass-minus"></i> Zoom -</button>
+                    <button id="rotateLeftBtn"><i class="fa-solid fa-rotate-left"></i> Left</button>
+                    <button id="rotateRightBtn"><i class="fa-solid fa-rotate-right"></i> Right</button>
+                    <button id="cropApplyBtn"><i class="fa-solid fa-crop"></i> Apply Crop</button>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button id="generateBtn">Generate 8 Photos</button>
+                <button id="printBtn">Print</button>
+                <button id="downloadBtn">Download PDF</button>
+            </div>
+
+            <div class="preview">
+                <h2>Preview</h2>
+                <canvas id="canvas" width="1800" height="1200"></canvas>
+            </div>
+
+            <div class="passport-settings">
+                <h3>Settings</h3>
+                <!-- Hidden input set to 300 -->
+                <input type="hidden" id="quality" value="300">
+
+                <label>Border</label>
+                <select id="borderSelect">
+                    <option value="yes">Enable</option>
+                    <option value="no">Disable</option>
+                </select>
+            </div>
+
+            <p id="status">Ready</p>
+        </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
     <script>
-        async function generate() {
-            const file = document.getElementById('fileInput').files[0];
-            if (!file) return alert("Select Photo");
-            
-            const grid = document.getElementById('grid-container');
-            grid.innerHTML = "Processing...";
-            
-            let formData = new FormData();
-            formData.append('image', file);
-            
-            let res = await fetch('/process', { method: 'POST', body: formData });
-            let blob = await res.blob();
-            let url = URL.createObjectURL(blob);
-            
-            grid.innerHTML = "";
-            for (let i = 0; i < 8; i++) {
-                let img = document.createElement('img');
-                img.src = url;
-                img.className = 'thumb';
-                grid.appendChild(img);
+        const upload = document.getElementById("upload");
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const cropSection = document.getElementById("cropSection");
+        const cropImage = document.getElementById("cropImage");
+
+        const zoomInBtn = document.getElementById("zoomInBtn");
+        const zoomOutBtn = document.getElementById("zoomOutBtn");
+        const rotateLeftBtn = document.getElementById("rotateLeftBtn");
+        const rotateRightBtn = document.getElementById("rotateRightBtn");
+        const cropApplyBtn = document.getElementById("cropApplyBtn");
+
+        const generateBtn = document.getElementById("generateBtn");
+        const quality = document.getElementById("quality");
+        const borderSelect = document.getElementById("borderSelect");
+        const status = document.getElementById("status");
+
+        const printBtn = document.getElementById("printBtn");
+        const downloadBtn = document.getElementById("downloadBtn");
+
+        let cropper;
+        let img = new Image();
+        
+        // Background Process maintains 4x6 strictly
+        const selectedPaper = "4x6"; 
+
+        // Upload Image
+        upload.addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                cropSection.style.display = "block";
+                cropImage.src = event.target.result;
+
+                cropImage.onload = function () {
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    cropper = new Cropper(cropImage, {
+                        aspectRatio: 35 / 45,
+                        viewMode: 1,
+                        autoCropArea: 1,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: true,
+                        scalable: true,
+                        responsive: true
+                    });
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Zoom In
+        zoomInBtn.onclick = function () {
+            if (cropper) cropper.zoom(0.1);
+        };
+
+        // Zoom Out
+        zoomOutBtn.onclick = function () {
+            if (cropper) cropper.zoom(-0.1);
+        };
+
+        // Rotate Left
+        rotateLeftBtn.onclick = function () {
+            if (cropper) cropper.rotate(-90);
+        };
+
+        // Rotate Right
+        rotateRightBtn.onclick = function () {
+            if (cropper) cropper.rotate(90);
+        };
+
+        // Apply Crop
+        cropApplyBtn.onclick = function () {
+            if (!cropper) return;
+
+            const croppedCanvas = cropper.getCroppedCanvas({
+                width: 700,
+                height: 900,
+                imageSmoothingQuality: "high"
+            });
+
+            img.onload = function () {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 100, 100, 700, 900);
+            };
+            img.src = croppedCanvas.toDataURL("image/png");
+
+            cropSection.style.display = "none";
+            status.innerText = "Photo cropped successfully. Click 'Generate 8 Photos' below.";
+        };
+
+        // Generate Grid (Processes 4x6 Canvas layout automatically)
+        generateBtn.onclick = function () {
+            if (!img.src) {
+                alert("Please upload and crop a photo first.");
+                return;
             }
-        }
 
-        async function downloadPDF() {
-            const element = document.getElementById('grid-container');
-            if (element.innerHTML === "") return alert("Generate photo first!");
+            const dpi = parseInt(quality.value);
+            const photoW = (35 / 25.4) * dpi;
+            const photoH = (45 / 25.4) * dpi;
+
+            const cols = 4;
+            const rows = 2;
+            const gap = 40;
+
+            // Dimensions structured for 4x6 Sheet layout
+            canvas.width = 1800;
+            canvas.height = 1200;
+
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const totalWidth = cols * photoW + (cols - 1) * gap;
             
-            // Failsafe: Wait for all images to load before PDF
-            const images = element.querySelectorAll('img');
-            await Promise.all(Array.from(images).map(img => {
-                if (img.complete) return Promise.resolve();
-                return new Promise(resolve => img.onload = resolve);
-            }));
+            const startX = (canvas.width - totalWidth) / 2;
+            // startY को 100 से घटाकर 70 किया गया है ताकि फ़ोटो ऊपर की तरफ शिफ्ट हो जाएँ
+            const startY = 70; 
 
-            html2pdf().from(element).set({
-                margin: 0.5,
-                filename: 'Makar7-Final.pdf',
-                image: { type: 'jpeg', quality: 1.0 },
-                html2canvas: { scale: 2 }
-            }).save();
-        }
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    let x = startX + c * (photoW + gap);
+                    let y = startY + r * (photoH + gap);
+
+                    ctx.drawImage(img, x, y, photoW, photoH);
+
+                    if (borderSelect.value === "yes") {
+                        ctx.strokeStyle = "#666";
+                        ctx.lineWidth = 3;
+                        ctx.strokeRect(x, y, photoW, photoH);
+                    }
+                }
+            }
+            status.innerText = "8 Passport Photos Generated Successfully.";
+        };
+
+        // Print Functionality
+        printBtn.onclick = function () {
+            if (!img.src) {
+                alert("Generate photos first.");
+                return;
+            }
+
+            const image = canvas.toDataURL("image/jpeg", 1);
+            const win = window.open("");
+            win.document.write(`
+                <html>
+                <head><title>Print</title></head>
+                <body style="margin:0;">
+                <img src="${image}" style="width:100%;">
+                <script>
+                window.onload=function(){
+                    window.print();
+                    window.close();
+                }
+                <\/script>
+                </body>
+                </html>
+            `);
+        };
+
+        // Download PDF Functionality (Processes 4x6 landscape document)
+        downloadBtn.onclick = function () {
+            if (!img.src) {
+                alert("Generate photos first.");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: "landscape",
+                unit: "mm",
+                format: [102, 152] 
+            });
+
+            const image = canvas.toDataURL("image/jpeg", 1);
+            pdf.addImage(image, "JPEG", 0, 0, 152, 102);
+            pdf.save("MAKAR7-HD-Passport-Photo.pdf");
+        };
     </script>
 </body>
 </html>

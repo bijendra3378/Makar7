@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-site-verification" content="EY6Zad842ktm-smtiVoeq7Ya9vjKGKC9s6WAmS5smPY" />
+    <meta name="google-site-verification" content="EY6Zad842ktm-smtiVoeq7Ya9vjKGKC9s6WAmS5smPY" />
     <title>MAKAR7 HD Passport Photo Maker</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -37,7 +37,7 @@
             backdrop-filter: blur(20px);
             border-radius: 25px;
             padding: 30px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, .35);
+            box-shadow: 0 15px 40px rgba(0,0,0,.35);
         }
 
         .header {
@@ -60,13 +60,17 @@
             opacity: .8;
         }
 
+        .upload-box {
+            margin-top: 20px;
+        }
+
         .upload-box label {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 180px;
-            border: 2px dashed rgba(255, 255, 255, .5);
+            border: 2px dashed rgba(255,255,255,.5);
             border-radius: 18px;
             color: #fff;
             cursor: pointer;
@@ -88,15 +92,15 @@
 
         #cropSection h2 {
             color: #fff;
-            margin-bottom: 15px;
             text-align: center;
+            margin-bottom: 15px;
         }
 
         #cropImage {
-            max-width: 100%;
-            display: block;
-            border-radius: 15px;
+            width: 100%;
+            max-height: 500px;
             background: #fff;
+            border-radius: 15px;
         }
 
         .buttons {
@@ -121,23 +125,17 @@
             transform: translateY(-3px);
         }
 
-        #generateBtn {
-            background: #2563eb;
+        .buttons button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        #printBtn {
-            background: #f59e0b;
-        }
+        #generateBtn { background: #2563eb; }
+        #printBtn { background: #f59e0b; }
+        #downloadBtn { background: #ef4444; }
 
-        #downloadBtn {
-            background: #ef4444;
-        }
-
-        #zoomInBtn,
-        #zoomOutBtn,
-        #rotateLeftBtn,
-        #rotateRightBtn,
-        #cropApplyBtn {
+        #zoomInBtn, #zoomOutBtn, #rotateLeftBtn, #rotateRightBtn, #cropApplyBtn {
             background: #16a34a;
         }
 
@@ -145,6 +143,7 @@
             background: #fff;
             padding: 20px;
             border-radius: 20px;
+            margin-top: 20px;
         }
 
         .preview h2 {
@@ -184,26 +183,23 @@
             padding: 10px;
             border: none;
             border-radius: 10px;
+            font-size: 15px;
         }
 
         #status {
             text-align: center;
             color: #fff;
             margin-top: 20px;
+            font-size: 16px;
+            font-weight: 600;
         }
 
-        @media(max-width:768px) {
-            .card {
-                padding: 18px;
-            }
-
-            .header h1 {
-                font-size: 30px;
-            }
-
-            .buttons {
-                grid-template-columns: 1fr;
-            }
+        @media(max-width: 768px) {
+            .card { padding: 18px; }
+            .header h1 { font-size: 30px; }
+            .buttons { grid-template-columns: 1fr; }
+            .preview { padding: 12px; }
+            canvas { width: 100%; height: auto; }
         }
     </style>
 </head>
@@ -211,6 +207,7 @@
 
     <div class="container">
         <div class="card">
+
             <div class="header">
                 <i class="fa-solid fa-camera"></i>
                 <h1>MAKAR7</h1>
@@ -230,41 +227,50 @@
                 <h2>Crop Photo</h2>
                 <img id="cropImage">
                 <div class="buttons">
-                    <button id="zoomInBtn"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom +</button>
-                    <button id="zoomOutBtn"><i class="fa-solid fa-magnifying-glass-minus"></i> Zoom -</button>
-                    <button id="rotateLeftBtn"><i class="fa-solid fa-rotate-left"></i> Left</button>
-                    <button id="rotateRightBtn"><i class="fa-solid fa-rotate-right"></i> Right</button>
-                    <button id="cropApplyBtn"><i class="fa-solid fa-crop"></i> Apply Crop</button>
+                    <button id="zoomInBtn" type="button"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom +</button>
+                    <button id="zoomOutBtn" type="button"><i class="fa-solid fa-magnifying-glass-minus"></i> Zoom -</button>
+                    <button id="rotateLeftBtn" type="button"><i class="fa-solid fa-rotate-left"></i> Rotate Left</button>
+                    <button id="rotateRightBtn" type="button"><i class="fa-solid fa-rotate-right"></i> Rotate Right</button>
+                    <button id="cropApplyBtn" type="button"><i class="fa-solid fa-crop"></i> Apply Crop</button>
                 </div>
             </div>
 
             <div class="buttons">
-                <button id="generateBtn">Generate 8 Photos</button>
-                <button id="printBtn">Print</button>
-                <button id="downloadBtn">Download PDF</button>
+                <button id="generateBtn" type="button" disabled><i class="fa-solid fa-images"></i> Generate 8 Photos</button>
+                <button id="printBtn" type="button" disabled><i class="fa-solid fa-print"></i> Print</button>
+                <button id="downloadBtn" type="button" disabled><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
             </div>
 
             <div class="preview">
-                <h2>Preview</h2>
+                <h2>Passport Photo Preview</h2>
                 <canvas id="canvas" width="1800" height="1200"></canvas>
             </div>
 
             <div class="passport-settings">
-                <h3>Settings</h3>
-                <label>Photo Quality</label>
+                <h3>Passport Settings</h3>
+
+                <label for="quality">Photo Quality</label>
                 <select id="quality">
                     <option value="300">HD 300 DPI</option>
                     <option value="600">Ultra HD 600 DPI</option>
                 </select>
 
-                <label>Border</label>
+                <label for="borderSelect">Border</label>
                 <select id="borderSelect">
-                    <option value="yes">Enable</option>
-                    <option value="no">Disable</option>
+                    <option value="yes">Enable Border</option>
+                    <option value="no">Disable Border</option>
+                </select>
+
+                <label for="bgSelect">Background</label>
+                <select id="bgSelect">
+                    <option value="original">Original Background</option>
+                    <option value="white">White Background (AI)</option>
+                    <option value="blue">Blue Background (AI)</option>
                 </select>
             </div>
 
             <p id="status">Ready</p>
+
         </div>
     </div>
 
@@ -285,35 +291,36 @@
         const cropApplyBtn = document.getElementById("cropApplyBtn");
 
         const generateBtn = document.getElementById("generateBtn");
-        const quality = document.getElementById("quality");
-        const borderSelect = document.getElementById("borderSelect");
-        const status = document.getElementById("status");
-
         const printBtn = document.getElementById("printBtn");
         const downloadBtn = document.getElementById("downloadBtn");
 
+        const quality = document.getElementById("quality");
+        const borderSelect = document.getElementById("borderSelect");
+        const bgSelect = document.getElementById("bgSelect");
+        const status = document.getElementById("status");
+
         let cropper;
         let img = new Image();
-        
-        // Background Process maintains 4x6 strictly
-        const selectedPaper = "4x6"; 
+        let originalImage = "";
+        let hasCroppedImage = false;
+        let hasGenerated = false;
 
-        // Upload Image
-        upload.addEventListener("change", function (e) {
+        // Upload & Initialize Cropper
+        upload.addEventListener("change", function(e){
             const file = e.target.files[0];
-            if (!file) return;
+            if(!file) return;
 
             const reader = new FileReader();
-            reader.onload = function (event) {
+            reader.onload = function(event){
                 cropSection.style.display = "block";
                 cropImage.src = event.target.result;
 
-                cropImage.onload = function () {
-                    if (cropper) {
+                cropImage.onload = function(){
+                    if(cropper){
                         cropper.destroy();
                     }
                     cropper = new Cropper(cropImage, {
-                        aspectRatio: 35 / 45,
+                        aspectRatio: 35/45,
                         viewMode: 1,
                         autoCropArea: 1,
                         movable: true,
@@ -327,29 +334,14 @@
             reader.readAsDataURL(file);
         });
 
-        // Zoom In
-        zoomInBtn.onclick = function () {
-            if (cropper) cropper.zoom(0.1);
-        };
+        // Cropper Controls
+        zoomInBtn.onclick = () => cropper && cropper.zoom(0.1);
+        zoomOutBtn.onclick = () => cropper && cropper.zoom(-0.1);
+        rotateLeftBtn.onclick = () => cropper && cropper.rotate(-90);
+        rotateRightBtn.onclick = () => cropper && cropper.rotate(90);
 
-        // Zoom Out
-        zoomOutBtn.onclick = function () {
-            if (cropper) cropper.zoom(-0.1);
-        };
-
-        // Rotate Left
-        rotateLeftBtn.onclick = function () {
-            if (cropper) cropper.rotate(-90);
-        };
-
-        // Rotate Right
-        rotateRightBtn.onclick = function () {
-            if (cropper) cropper.rotate(90);
-        };
-
-        // Apply Crop
-        cropApplyBtn.onclick = function () {
-            if (!cropper) return;
+        cropApplyBtn.onclick = async function(){
+            if(!cropper) return;
 
             const croppedCanvas = cropper.getCroppedCanvas({
                 width: 700,
@@ -357,21 +349,75 @@
                 imageSmoothingQuality: "high"
             });
 
-            img.onload = function () {
+            originalImage = croppedCanvas.toDataURL("image/png");
+            hasCroppedImage = true;
+            await processBackground();
+            cropSection.style.display = "none";
+        };
+
+        bgSelect.onchange = function(){
+            if(originalImage){
+                processBackground();
+            }
+        };
+
+        // Background Processing
+        async function processBackground(){
+            if(bgSelect.value === "original"){
+                updatePreview(originalImage);
+                return;
+            }
+
+            status.innerText = "Removing Background...";
+
+            try {
+                const response = await fetch("/remove-bg", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        image: originalImage,
+                        color: bgSelect.value
+                    })
+                });
+
+                if(!response.ok){
+                    throw new Error("Server returned status " + response.status);
+                }
+
+                const data = await response.json();
+
+                if(data.success){
+                    updatePreview(data.image);
+                    status.innerText = "Background Removed Successfully";
+                } else {
+                    updatePreview(originalImage);
+                    status.innerText = data.message || "Background removal failed (using original)";
+                }
+            } catch(err) {
+                console.log(err);
+                updatePreview(originalImage);
+                status.innerText = "Backend Connection Failed (Using Original)";
+            }
+        }
+
+        function updatePreview(src){
+            img.onload = function(){
+                canvas.width = 1800;
+                canvas.height = 1200;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = "#ffffff";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 100, 100, 700, 900);
-            };
-            img.src = croppedCanvas.toDataURL("image/png");
+                generateBtn.disabled = false;
+            }
+            img.src = src;
+        }
 
-            cropSection.style.display = "none";
-            status.innerText = "Photo cropped successfully. Click 'Generate 8 Photos' below.";
-        };
-
-        // Generate Grid (Processes 4x6 Canvas layout automatically)
+        // Generate 8 Photos
         generateBtn.onclick = function () {
-            if (!img.src) {
+            if (!img.src || !hasCroppedImage) {
                 alert("Please upload and crop a photo first.");
                 return;
             }
@@ -384,7 +430,6 @@
             const rows = 2;
             const gap = 40;
 
-            // Dimensions structured for 4x6 Sheet layout
             canvas.width = 1800;
             canvas.height = 1200;
 
@@ -392,15 +437,13 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             const totalWidth = cols * photoW + (cols - 1) * gap;
-            
             const startX = (canvas.width - totalWidth) / 2;
-            // startY को 100 से घटाकर 70 किया गया है ताकि फ़ोटो ऊपर की तरफ शिफ्ट हो जाएँ
-            const startY = 70; 
+            const startY = 70;
 
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
-                    let x = startX + c * (photoW + gap);
-                    let y = startY + r * (photoH + gap);
+                    const x = startX + c * (photoW + gap);
+                    const y = startY + r * (photoH + gap);
 
                     ctx.drawImage(img, x, y, photoW, photoH);
 
@@ -411,37 +454,40 @@
                     }
                 }
             }
+            hasGenerated = true;
+            printBtn.disabled = false;
+            downloadBtn.disabled = false;
             status.innerText = "8 Passport Photos Generated Successfully.";
         };
 
         // Print Functionality
         printBtn.onclick = function () {
-            if (!img.src) {
+            if (!hasGenerated) {
                 alert("Generate photos first.");
                 return;
             }
 
             const image = canvas.toDataURL("image/jpeg", 1);
             const win = window.open("");
+
             win.document.write(`
                 <html>
-                <head><title>Print</title></head>
-                <body style="margin:0;">
-                <img src="${image}" style="width:100%;">
-                <script>
-                window.onload=function(){
-                    window.print();
-                    window.close();
-                }
-                <\/script>
+                <body style="margin:0">
+                    <img src="${image}" style="width:100%">
                 </body>
                 </html>
             `);
+            win.document.close();
+
+            win.onload = function () {
+                win.print();
+                win.close();
+            };
         };
 
-        // Download PDF Functionality (Processes 4x6 landscape document)
+        // Download PDF Functionality
         downloadBtn.onclick = function () {
-            if (!img.src) {
+            if (!hasGenerated) {
                 alert("Generate photos first.");
                 return;
             }
@@ -450,7 +496,7 @@
             const pdf = new jsPDF({
                 orientation: "landscape",
                 unit: "mm",
-                format: [102, 152] 
+                format: [102, 152] // 4x6 Inches Sheet
             });
 
             const image = canvas.toDataURL("image/jpeg", 1);

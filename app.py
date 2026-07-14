@@ -6,7 +6,7 @@ from rembg import remove, new_session
 
 app = Flask(__name__, template_folder="templates")
 
-# मॉडल सेशन को शुरुआत में None रखेंगे ताकि स्टार्टअप पर लोड न पड़े
+# शुरुआत में इसे None रखेंगे ताकि ऐप तुरंत स्टार्ट हो जाए
 model_session = None
 
 @app.route("/")
@@ -30,8 +30,7 @@ def remove_bg():
         img_bytes = base64.b64decode(image_data)
         input_image = Image.open(io.BytesIO(img_bytes))
 
-        # जब पहली बार कोई बैकग्राउंड चेंज करने की रिक्वेस्ट भेजेगा, मॉडल तब डाउनलोड होगा
-        # इससे ऐप स्टार्टअप के समय कभी क्रैश नहीं होगा
+        # मॉडल पहली फोटो प्रोसेस करते समय बैकग्राउंड में डाउनलोड होगा
         if model_session is None:
             model_session = new_session("u2netp")
 

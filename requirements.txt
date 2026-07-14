@@ -1,4 +1,6 @@
 flask
+gunicorn
 rembg
 pillow
-gunicorn
+numpy
+onnxruntime

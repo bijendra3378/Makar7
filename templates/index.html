@@ -2,115 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAKAR7 - Professional HD Passport Photo Maker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>MAKAR7 Final Fix</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0f2027, #2c5364); color: white; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
-        .container { background: #1c2833; padding: 25px; border-radius: 20px; width: 100%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        .header i { font-size: 3rem; color: #3498db; margin-bottom: 10px; }
-        .upload-box { border: 2px dashed #4a5d6e; border-radius: 15px; padding: 20px; margin: 20px 0; cursor: pointer; transition: 0.3s; }
-        .upload-box:hover { border-color: #3498db; }
-        .btn-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 20px; }
-        .btn-row button { padding: 10px 5px; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
-        .preview-box { background: white; border-radius: 10px; padding: 15px; margin-bottom: 20px; min-height: 250px; color: #333; }
-        #grid-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .thumb { width: 100%; aspect-ratio: 3.5/4.5; object-fit: cover; border: 1px solid #ccc; }
-        .settings-box { background: #34495e; padding: 15px; border-radius: 10px; text-align: left; }
-        select { width: 100%; padding: 10px; border-radius: 5px; margin: 5px 0 15px 0; border: none; }
-        .loading-screen { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 999; justify-content: center; align-items: center; color: white; }
+        body { background: #0f2027; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
+        .container { background: #1c2833; padding: 20px; border-radius: 20px; max-width: 450px; margin: auto; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 20px; background: white; padding: 10px; }
+        .thumb { width: 100%; height: auto; border: 1px solid #ccc; }
+        button { padding: 10px 20px; cursor: pointer; border-radius: 5px; border: none; margin: 5px; font-weight: bold; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h2>MAKAR7 HD</h2>
+        <input type="file" id="fileInput">
+        <br><br>
+        <button onclick="generate()">Generate 8 Photos</button>
+        <button onclick="downloadPDF()">Download PDF</button>
 
-<div class="container">
-    <div class="header"><i class="fa-solid fa-camera"></i><h2>MAKAR7</h2><p>Professional HD Passport Photo Maker</p></div>
-    
-    <div class="upload-box" id="drop-zone"><i class="fa-solid fa-cloud-upload"></i><h4>Upload Passport Photo</h4><p>Select JPG / PNG Image</p></div>
-    <input type="file" id="file-input" style="display:none">
-
-    <div class="btn-row">
-        <button style="background:#2980b9;" id="gen-btn">Generate 8 Photos</button>
-        <button style="background:#f39c12;" onclick="window.print()">Print</button>
-        <button style="background:#c0392b;" id="dl-btn">Download PDF</button>
+        <div id="grid-container" class="grid"></div>
     </div>
 
-    <div class="preview-box">
-        <h4 style="margin:0 0 10px 0;">Preview</h4>
-        <div id="grid-container"></div>
-    </div>
-
-    <div class="settings-box">
-        <label>Photo Quality</label>
-        <select id="quality"><option>HD 300 DPI</option></select>
-        <label>Background</label>
-        <select id="bg-select">
-            <option value="original">Original</option>
-            <option value="White Background (AI)">White Background (AI)</option>
-            <option value="Blue Background (AI)">Blue Background (AI)</option>
-        </select>
-    </div>
-</div>
-
-<div class="loading-screen" id="loader"><div><h3>Processing High Quality AI...</h3><p>Please wait 30 seconds for first photo.</p></div></div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script>
-    const fileInput = document.getElementById('file-input');
-    const dropZone = document.getElementById('drop-zone');
-    const genBtn = document.getElementById('gen-btn');
-    const loader = document.getElementById('loader');
-    const grid = document.getElementById('grid-container');
-    let selectedFile = null;
-
-    dropZone.onclick = () => fileInput.click();
-    fileInput.onchange = (e) => selectedFile = e.target.files[0];
-
-    genBtn.onclick = async () => {
-        if (!selectedFile) return alert("Select photo first!");
-        loader.style.display = "flex";
-        grid.innerHTML = "";
-        
-        let imgUrl = URL.createObjectURL(selectedFile);
-        const bgOption = document.getElementById('bg-select').value;
-
-        if (bgOption.includes("(AI)")) {
-            let fd = new FormData();
-            fd.append('image', selectedFile);
-            try {
-                let res = await fetch('/', { method: 'POST', body: fd });
-                let blob = await res.blob();
-                imgUrl = await processBg(blob, bgOption);
-            } catch { alert("AI Error"); loader.style.display = "none"; return; }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        async function generate() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return alert("Select Photo");
+            
+            const grid = document.getElementById('grid-container');
+            grid.innerHTML = "Processing...";
+            
+            let formData = new FormData();
+            formData.append('image', file);
+            
+            let res = await fetch('/process', { method: 'POST', body: formData });
+            let blob = await res.blob();
+            let url = URL.createObjectURL(blob);
+            
+            grid.innerHTML = "";
+            for (let i = 0; i < 8; i++) {
+                let img = document.createElement('img');
+                img.src = url;
+                img.className = 'thumb';
+                grid.appendChild(img);
+            }
         }
 
-        for (let i = 0; i < 8; i++) {
-            let img = document.createElement('img');
-            img.src = imgUrl; img.className = 'thumb';
-            grid.appendChild(img);
+        async function downloadPDF() {
+            const element = document.getElementById('grid-container');
+            if (element.innerHTML === "") return alert("Generate photo first!");
+            
+            // Failsafe: Wait for all images to load before PDF
+            const images = element.querySelectorAll('img');
+            await Promise.all(Array.from(images).map(img => {
+                if (img.complete) return Promise.resolve();
+                return new Promise(resolve => img.onload = resolve);
+            }));
+
+            html2pdf().from(element).set({
+                margin: 0.5,
+                filename: 'Makar7-Final.pdf',
+                image: { type: 'jpeg', quality: 1.0 },
+                html2canvas: { scale: 2 }
+            }).save();
         }
-        loader.style.display = "none";
-    };
-
-    function processBg(blob, bg) {
-        return new Promise((res) => {
-            let img = new Image();
-            img.src = URL.createObjectURL(blob);
-            img.onload = () => {
-                let canvas = document.createElement('canvas');
-                canvas.width = img.width * 2; canvas.height = img.height * 2;
-                let ctx = canvas.getContext('2d');
-                ctx.fillStyle = bg.includes("White") ? "#FFFFFF" : "#0044ff";
-                ctx.fillRect(0,0, canvas.width, canvas.height);
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                res(canvas.toDataURL('image/jpeg', 1.0));
-            };
-        });
-    }
-
-    document.getElementById('dl-btn').onclick = () => {
-        html2pdf().from(document.getElementById('grid-container')).save('Makar7-HD.pdf');
-    };
-</script>
+    </script>
 </body>
 </html>

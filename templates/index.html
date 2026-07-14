@@ -3,506 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="EY6Zad842ktm-smtiVoeq7Ya9vjKGKC9s6WAmS5smPY" />
-    <title>MAKAR7 HD Passport Photo Maker</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+    <title>MAKAR7 - Professional HD Passport Photo Maker</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
         body {
-            background: linear-gradient(135deg, #07111f, #162447, #2563eb);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
         }
-
         .container {
-            width: 100%;
-            max-width: 1100px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, .08);
-            backdrop-filter: blur(20px);
-            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,.35);
-        }
-
-        .header {
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             text-align: center;
-            color: #fff;
-            margin-bottom: 25px;
         }
-
-        .header i {
-            font-size: 60px;
-            color: #60a5fa;
-        }
-
-        .header h1 {
-            font-size: 42px;
-            margin-top: 10px;
-        }
-
-        .header p {
-            opacity: .8;
-        }
-
+        .header i { font-size: 3rem; color: #38ef7d; margin-bottom: 10px; }
+        .header h1 { margin: 0; font-size: 2rem; letter-spacing: 2px; }
+        .header p { margin: 5px 0 20px 0; color: #ccc; font-size: 0.9rem; }
+        
         .upload-box {
-            margin-top: 20px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: rgba(0,0,0,0.2);
+            margin-bottom: 20px;
         }
-
-        .upload-box label {
+        .upload-box:hover { border-color: #38ef7d; background: rgba(0,0,0,0.3); }
+        .upload-box i { font-size: 2.5rem; color: #ccc; margin-bottom: 10px; }
+        
+        .btn-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            color: white;
+        }
+        .btn-generate { background: #1e3c72; }
+        .btn-print { background: #f39c12; }
+        .btn-pdf { background: #e74c3c; }
+        button:hover { opacity: 0.9; transform: translateY(-2px); }
+        
+        .preview-box {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            min-height: 250px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 180px;
-            border: 2px dashed rgba(255,255,255,.5);
-            border-radius: 18px;
-            color: #fff;
-            cursor: pointer;
-            transition: .3s;
         }
-
-        .upload-box label:hover {
-            background: rgba(255, 255, 255, .08);
-        }
-
-        .upload-box i {
-            font-size: 55px;
-            margin-bottom: 10px;
-        }
-
-        #cropSection {
-            margin-top: 25px;
-        }
-
-        #cropSection h2 {
-            color: #fff;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        #cropImage {
-            width: 100%;
-            max-height: 500px;
-            background: #fff;
-            border-radius: 15px;
-        }
-
-        .buttons {
+        #grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .buttons button {
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: .3s;
-        }
-
-        .buttons button:hover {
-            transform: translateY(-3px);
-        }
-
-        .buttons button:disabled {
-            opacity: .5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        #generateBtn { background: #2563eb; }
-        #printBtn { background: #f59e0b; }
-        #downloadBtn { background: #ef4444; }
-
-        #zoomInBtn, #zoomOutBtn, #rotateLeftBtn, #rotateRightBtn, #cropApplyBtn {
-            background: #16a34a;
-        }
-
-        .preview {
-            background: #fff;
-            padding: 20px;
-            border-radius: 20px;
-            margin-top: 20px;
-        }
-
-        .preview h2 {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        canvas {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
             width: 100%;
-            display: block;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            background: #fff;
         }
-
-        .passport-settings {
-            margin-top: 25px;
-            background: rgba(255, 255, 255, .08);
-            padding: 20px;
-            border-radius: 15px;
+        .passport-thumb {
+            width: 100%;
+            aspect-ratio: 3.5 / 4.5;
+            object-fit: cover;
+            box-sizing: border-box;
+            background-color: #ddd;
         }
-
-        .passport-settings h3 {
-            color: #fff;
-            margin-bottom: 15px;
+        .has-border { border: 3px solid white; }
+        
+        .settings-box {
+            text-align: left;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 10px;
         }
-
-        .passport-settings label {
-            display: block;
-            color: #fff;
-            margin-top: 15px;
-            margin-bottom: 8px;
-        }
-
-        .passport-settings select {
+        .settings-box label { display: block; font-size: 0.85rem; color: #ccc; margin: 10px 0 5px 0; }
+        .settings-box select {
             width: 100%;
             padding: 10px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: #203a43;
+            color: white;
+            outline: none;
         }
-
-        #status {
-            text-align: center;
-            color: #fff;
-            margin-top: 20px;
-            font-size: 16px;
-            font-weight: 600;
+        #status-text { margin-top: 15px; font-size: 0.9rem; color: #38ef7d; font-weight: bold; }
+        
+        /* Loading overlay styling */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
-
-        @media(max-width: 768px) {
-            .card { padding: 18px; }
-            .header h1 { font-size: 30px; }
-            .buttons { grid-template-columns: 1fr; }
-            .preview { padding: 12px; }
-            canvas { width: 100%; height: auto; }
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.1);
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            border-left-color: #38ef7d;
+            animation: spin 1s linear infinite;
         }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="card">
+<div class="container">
+    <div class="header">
+        <i class="fa-solid fa-camera-retro"></i>
+        <h1>MAKAR7</h1>
+        <p>Professional HD Passport Photo Maker</p>
+    </div>
 
-            <div class="header">
-                <i class="fa-solid fa-camera"></i>
-                <h1>MAKAR7</h1>
-                <p>Professional HD Passport Photo Maker</p>
-            </div>
+    <!--Hidden Input File-->
+    <input type="file" id="file-input" accept="image/*" style="display: none;">
 
-            <div class="upload-box">
-                <label for="upload">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
-                    <h2>Upload Photo</h2>
-                    <p>Select JPG / PNG</p>
-                </label>
-                <input type="file" id="upload" accept="image/*" hidden>
-            </div>
+    <div class="upload-box" id="drop-zone">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <h3>Upload Photo</h3>
+        <p>Select JPG / PNG</p>
+    </div>
 
-            <div id="cropSection" style="display:none;">
-                <h2>Crop Photo</h2>
-                <img id="cropImage">
-                <div class="buttons">
-                    <button id="zoomInBtn" type="button"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom +</button>
-                    <button id="zoomOutBtn" type="button"><i class="fa-solid fa-magnifying-glass-minus"></i> Zoom -</button>
-                    <button id="rotateLeftBtn" type="button"><i class="fa-solid fa-rotate-left"></i> Rotate Left</button>
-                    <button id="rotateRightBtn" type="button"><i class="fa-solid fa-rotate-right"></i> Rotate Right</button>
-                    <button id="cropApplyBtn" type="button"><i class="fa-solid fa-crop"></i> Apply Crop</button>
-                </div>
-            </div>
+    <div class="btn-group">
+        <button class="btn-generate" id="generate-btn">Generate 8 Photos</button>
+        <button class="btn-print" onclick="window.print()">Print</button>
+        <button class="btn-pdf" id="download-btn">Download PDF</button>
+    </div>
 
-            <div class="buttons">
-                <button id="generateBtn" type="button" disabled><i class="fa-solid fa-images"></i> Generate 8 Photos</button>
-                <button id="printBtn" type="button" disabled><i class="fa-solid fa-print"></i> Print</button>
-                <button id="downloadBtn" type="button" disabled><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
-            </div>
-
-            <div class="preview">
-                <h2>Passport Photo Preview</h2>
-                <canvas id="canvas" width="1800" height="1200"></canvas>
-            </div>
-
-            <div class="passport-settings">
-                <h3>Passport Settings</h3>
-
-                <label for="quality">Photo Quality</label>
-                <select id="quality">
-                    <option value="300">HD 300 DPI</option>
-                    <option value="600">Ultra HD 600 DPI</option>
-                </select>
-
-                <label for="borderSelect">Border</label>
-                <select id="borderSelect">
-                    <option value="yes">Enable Border</option>
-                    <option value="no">Disable Border</option>
-                </select>
-
-                <label for="bgSelect">Background</label>
-                <select id="bgSelect">
-                    <option value="original">Original Background</option>
-                    <option value="white">White Background (AI)</option>
-                    <option value="blue">Blue Background (AI)</option>
-                </select>
-            </div>
-
-            <p id="status">Ready</p>
-
+    <h4 style="text-align: left; margin: 5px 0;">Passport Photo Preview</h4>
+    <div class="preview-box">
+        <div id="grid-container">
+            <!-- 8 Photos will generate here -->
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+    <div class="settings-box">
+        <h3 style="margin: 0 0 10px 0; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;">Passport Settings</h3>
+        
+        <label>Photo Quality</label>
+        <select id="quality-select">
+            <option value="300">HD 300 DPI</option>
+            <option value="600">Ultra HD 600 DPI</option>
+        </select>
 
-    <script>
-        const upload = document.getElementById("upload");
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
+        <label>Border</label>
+        <select id="border-select">
+            <option value="true">Enable Border</option>
+            <option value="false">Remove Border</option>
+        </select>
 
-        const cropSection = document.getElementById("cropSection");
-        const cropImage = document.getElementById("cropImage");
+        <label>Background</label>
+        <select id="bg-select">
+            <option value="original">Original Background</option>
+            <option value="White Background (AI)">White Background (AI)</option>
+            <option value="Blue Background (AI)">Blue Background (AI)</option>
+            <option value="Red Background (AI)">Red Background (AI)</option>
+        </select>
+    </div>
 
-        const zoomInBtn = document.getElementById("zoomInBtn");
-        const zoomOutBtn = document.getElementById("zoomOutBtn");
-        const rotateLeftBtn = document.getElementById("rotateLeftBtn");
-        const rotateRightBtn = document.getElementById("rotateRightBtn");
-        const cropApplyBtn = document.getElementById("cropApplyBtn");
+    <div id="status-text">Ready</div>
+</div>
 
-        const generateBtn = document.getElementById("generateBtn");
-        const printBtn = document.getElementById("printBtn");
-        const downloadBtn = document.getElementById("downloadBtn");
+<!-- Loading Animation Screen -->
+<div class="loading-overlay" id="loading-screen">
+    <div class="spinner"></div>
+    <p style="margin-top: 20px; font-weight: bold; color: #38ef7d;" id="loading-msg">AI is processing your image...</p>
+    <p style="font-size: 0.8rem; color: #aaa;">First photo takes 30-40 seconds to setup AI model.</p>
+</div>
 
-        const quality = document.getElementById("quality");
-        const borderSelect = document.getElementById("borderSelect");
-        const bgSelect = document.getElementById("bgSelect");
-        const status = document.getElementById("status");
+<!-- html2pdf Library for downloading PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-        let cropper;
-        let img = new Image();
-        let originalImage = "";
-        let hasCroppedImage = false;
-        let hasGenerated = false;
+<script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const generateBtn = document.getElementById('generate-btn');
+    const gridContainer = document.getElementById('grid-container');
+    const statusText = document.getElementById('status-text');
+    const bgSelect = document.getElementById('bg-select');
+    const borderSelect = document.getElementById('border-select');
+    const loadingScreen = document.getElementById('loading-screen');
 
-        // Upload & Initialize Cropper
-        upload.addEventListener("change", function(e){
-            const file = e.target.files[0];
-            if(!file) return;
+    let selectedFile = null;
 
-            const reader = new FileReader();
-            reader.onload = function(event){
-                cropSection.style.display = "block";
-                cropImage.src = event.target.result;
+    // Trigger file dialog
+    dropZone.addEventListener('click', () => fileInput.click());
 
-                cropImage.onload = function(){
-                    if(cropper){
-                        cropper.destroy();
-                    }
-                    cropper = new Cropper(cropImage, {
-                        aspectRatio: 35/45,
-                        viewMode: 1,
-                        autoCropArea: 1,
-                        movable: true,
-                        zoomable: true,
-                        rotatable: true,
-                        scalable: true,
-                        responsive: true
-                    });
-                };
-            };
-            reader.readAsDataURL(file);
-        });
+    fileInput.addEventListener('change', (e) => {
+        if(e.target.files.length > 0) {
+            selectedFile = e.target.files[0];
+            statusText.innerText = "Photo loaded: " + selectedFile.name;
+        }
+    });
 
-        // Cropper Controls
-        zoomInBtn.onclick = () => cropper && cropper.zoom(0.1);
-        zoomOutBtn.onclick = () => cropper && cropper.zoom(-0.1);
-        rotateLeftBtn.onclick = () => cropper && cropper.rotate(-90);
-        rotateRightBtn.onclick = () => cropper && cropper.rotate(90);
+    // Main logic for Generating 8 Photos with optional AI background removal
+    generateBtn.addEventListener('click', async () => {
+        if (!selectedFile) {
+            alert("Please upload a photo first!");
+            return;
+        }
 
-        cropApplyBtn.onclick = async function(){
-            if(!cropper) return;
+        gridContainer.innerHTML = ""; // Clear existing grid
+        const bgOption = bgSelect.value;
+        const hasBorder = borderSelect.value === "true";
+        
+        let finalImageSrc = "";
 
-            const croppedCanvas = cropper.getCroppedCanvas({
-                width: 700,
-                height: 900,
-                imageSmoothingQuality: "high"
-            });
+        // Check if user selected an AI Background option
+        if (bgOption.includes("(AI)")) {
+            loadingScreen.style.display = "flex";
+            statusText.innerText = "Processing AI Background...";
 
-            originalImage = croppedCanvas.toDataURL("image/png");
-            hasCroppedImage = true;
-            await processBackground();
-            cropSection.style.display = "none";
-        };
-
-        bgSelect.onchange = function(){
-            if(originalImage){
-                processBackground();
-            }
-        };
-
-        // Background Processing
-        async function processBackground(){
-            if(bgSelect.value === "original"){
-                updatePreview(originalImage);
-                return;
-            }
-
-            status.innerText = "Removing Background...";
+            let formData = new FormData();
+            formData.append('image', selectedFile);
 
             try {
-                const response = await fetch("/remove-bg", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        image: originalImage,
-                        color: bgSelect.value
-                    })
+                // Sending to our python flask backend (app.py)
+                let response = await fetch('/', {
+                    method: 'POST',
+                    body: formData
                 });
 
-                if(!response.ok){
-                    throw new Error("Server returned status " + response.status);
-                }
+                if (!response.ok) throw new Error("Backend AI Error");
 
-                const data = await response.json();
+                let blob = await response.blob();
+                
+                // Canvas trick to overlay color on top of transparent AI output
+                finalImageSrc = await applyBackgroundColor(blob, bgOption);
 
-                if(data.success){
-                    updatePreview(data.image);
-                    status.innerText = "Background Removed Successfully";
-                } else {
-                    updatePreview(originalImage);
-                    status.innerText = data.message || "Background removal failed (using original)";
-                }
-            } catch(err) {
-                console.log(err);
-                updatePreview(originalImage);
-                status.innerText = "Backend Connection Failed (Using Original)";
+            } catch (err) {
+                console.error(err);
+                alert("AI बैकग्राउंड रिमूव करने में एरर आया! कृपया दोबारा प्रयास करें।");
+                loadingScreen.style.display = "none";
+                statusText.innerText = "Error occurred.";
+                return;
             }
+            loadingScreen.style.display = "none";
+        } else {
+            // Use original image if no AI option is chosen
+            finalImageSrc = URL.createObjectURL(selectedFile);
         }
 
-        function updatePreview(src){
-            img.onload = function(){
-                canvas.width = 1800;
-                canvas.height = 1200;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = "#ffffff";
+        // Create the 8-photo grid structure inside the DOM
+        for (let i = 0; i < 8; i++) {
+            const img = document.createElement('img');
+            img.src = finalImageSrc;
+            img.classList.add('passport-thumb');
+            if (hasBorder) img.classList.add('has-border');
+            gridContainer.appendChild(img);
+        }
+
+        statusText.innerText = "8 Passport Photos Generated Successfully.";
+    });
+
+    // Helper function to color the transparent background from rembg
+    function applyBackgroundColor(blob, bgOption) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.src = URL.createObjectURL(blob);
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+
+                // Pick color based on selection
+                if(bgOption.includes("White")) ctx.fillStyle = "#FFFFFF";
+                else if(bgOption.includes("Blue")) ctx.fillStyle = "#0044ff";
+                else if(bgOption.includes("Red")) ctx.fillStyle = "#ff0000";
+                
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(img, 100, 100, 700, 900);
-                generateBtn.disabled = false;
-            }
-            img.src = src;
-        }
-
-        // Generate 8 Photos
-        generateBtn.onclick = function () {
-            if (!img.src || !hasCroppedImage) {
-                alert("Please upload and crop a photo first.");
-                return;
-            }
-
-            const dpi = parseInt(quality.value);
-            const photoW = (35 / 25.4) * dpi;
-            const photoH = (45 / 25.4) * dpi;
-
-            const cols = 4;
-            const rows = 2;
-            const gap = 40;
-
-            canvas.width = 1800;
-            canvas.height = 1200;
-
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            const totalWidth = cols * photoW + (cols - 1) * gap;
-            const startX = (canvas.width - totalWidth) / 2;
-            const startY = 70;
-
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    const x = startX + c * (photoW + gap);
-                    const y = startY + r * (photoH + gap);
-
-                    ctx.drawImage(img, x, y, photoW, photoH);
-
-                    if (borderSelect.value === "yes") {
-                        ctx.strokeStyle = "#666";
-                        ctx.lineWidth = 3;
-                        ctx.strokeRect(x, y, photoW, photoH);
-                    }
-                }
-            }
-            hasGenerated = true;
-            printBtn.disabled = false;
-            downloadBtn.disabled = false;
-            status.innerText = "8 Passport Photos Generated Successfully.";
-        };
-
-        // Print Functionality
-        printBtn.onclick = function () {
-            if (!hasGenerated) {
-                alert("Generate photos first.");
-                return;
-            }
-
-            const image = canvas.toDataURL("image/jpeg", 1);
-            const win = window.open("");
-
-            win.document.write(`
-                <html>
-                <body style="margin:0">
-                    <img src="${image}" style="width:100%">
-                </body>
-                </html>
-            `);
-            win.document.close();
-
-            win.onload = function () {
-                win.print();
-                win.close();
+                ctx.drawImage(img, 0, 0);
+                
+                resolve(canvas.toDataURL('image/jpeg'));
             };
+        });
+    }
+
+    // PDF Download Logic
+    document.getElementById('download-btn').addEventListener('click', () => {
+        if(gridContainer.children.length === 0) {
+            alert("First generate the photos to download PDF!");
+            return;
+        }
+        const element = document.getElementById('grid-container');
+        const opt = {
+            margin:       1,
+            filename:     'MAKAR7-HD-Passport-Photos.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
+        html2pdf().set(opt).from(element).save();
+    });
+</script>
 
-        // Download PDF Functionality
-        downloadBtn.onclick = function () {
-            if (!hasGenerated) {
-                alert("Generate photos first.");
-                return;
-            }
-
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({
-                orientation: "landscape",
-                unit: "mm",
-                format: [102, 152] // 4x6 Inches Sheet
-            });
-
-            const image = canvas.toDataURL("image/jpeg", 1);
-            pdf.addImage(image, "JPEG", 0, 0, 152, 102);
-            pdf.save("MAKAR7-HD-Passport-Photo.pdf");
-        };
-    </script>
 </body>
 </html>

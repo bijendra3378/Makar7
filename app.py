@@ -1,13 +1,11 @@
-from flask import Flask, request, jsonify, render_template
-from flask_cors import CORS
-
-from PIL import Image
-
+import os
 import base64
 import io
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
+from PIL import Image
 
 app = Flask(__name__)
-
 CORS(app)
 
 # rembg (and its ~50-100MB ONNX model) is imported lazily inside remove_bg(),
@@ -20,6 +18,10 @@ _remove_fn = None
 def get_remove_fn():
     global _remove_fn
     if _remove_fn is None:
+        # --- RENDER/HEROKU MEMORY & PERMISSION FIX ---
+        # Rembg ko force karein ki woh model ko /tmp folder mein download kare
+        os.environ["U2NET_HOME"] = "/tmp/.u2net"
+        
         from rembg import remove
         _remove_fn = remove
     return _remove_fn
@@ -38,9 +40,7 @@ def health():
 
 @app.route("/remove-bg", methods=["POST"])
 def remove_bg():
-
     try:
-
         data = request.get_json(silent=True)
 
         if not data or "image" not in data:
@@ -50,7 +50,6 @@ def remove_bg():
             }), 400
 
         image_data = data["image"]
-
         color = data.get("color", "white")
 
         if "," in image_data:
@@ -58,11 +57,13 @@ def remove_bg():
 
         input_bytes = base64.b64decode(image_data)
 
+        # Lazy loading of rembg and model
         remove = get_remove_fn()
         output_bytes = remove(input_bytes)
 
         img = Image.open(io.BytesIO(output_bytes)).convert("RGBA")
 
+        # Color background addition
         if color == "white":
             bg = Image.new("RGBA", img.size, (255, 255, 255, 255))
             bg.alpha_composite(img)
@@ -78,9 +79,7 @@ def remove_bg():
             final_img = img
 
         buffer = io.BytesIO()
-
         final_img.save(buffer, format="PNG")
-
         encoded = base64.b64encode(buffer.getvalue()).decode()
 
         return jsonify({
@@ -89,7 +88,6 @@ def remove_bg():
         })
 
     except Exception as e:
-
         return jsonify({
             "success": False,
             "message": str(e)
@@ -97,4 +95,6 @@ def remove_bg():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    # Render $PORT environment variable use karta hai, uske liye fallback system
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

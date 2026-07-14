@@ -1,100 +1,67 @@
-import os
 import base64
 import io
 from flask import Flask, request, jsonify, render_template
-from flask_cors import CORS
 from PIL import Image
+from rembg import remove, new_session
 
-app = Flask(__name__)
-CORS(app)
+app = Flask(__name__, template_folder="templates")
 
-# rembg (and its ~50-100MB ONNX model) is imported lazily inside remove_bg(),
-# not at module load time. This keeps app startup fast so Render's health
-# check doesn't time out while the model is downloading/loading. The model
-# is only pulled in the first time someone actually uses AI background removal.
-_remove_fn = None
-
-
-def get_remove_fn():
-    global _remove_fn
-    if _remove_fn is None:
-        # --- RENDER/HEROKU MEMORY & PERMISSION FIX ---
-        # Rembg ko force karein ki woh model ko /tmp folder mein download kare
-        os.environ["U2NET_HOME"] = "/tmp/.u2net"
-        
-        from rembg import remove
-        _remove_fn = remove
-    return _remove_fn
-
+# Render Free Tier (512MB RAM) को क्रैश से बचाने के लिए 4MB का 'u2netp' लाइटवेट मॉडल
+model_session = new_session("u2netp")
 
 @app.route("/")
-def home():
+def index():
+    # यह templates/index.html को रेंडर करेगा
     return render_template("index.html")
-
-
-@app.route("/health")
-def health():
-    # Lightweight endpoint for Render's health checks - does not touch rembg
-    return jsonify({"status": "ok"})
-
 
 @app.route("/remove-bg", methods=["POST"])
 def remove_bg():
     try:
-        data = request.get_json(silent=True)
-
+        data = request.get_json()
         if not data or "image" not in data:
-            return jsonify({
-                "success": False,
-                "message": "No image provided"
-            }), 400
+            return jsonify({"success": False, "message": "No image data provided"}), 400
 
         image_data = data["image"]
-        color = data.get("color", "white")
+        target_color = data.get("color", "original")
 
+        # Base64 string से हेडर साफ करना (e.g. data:image/png;base64,)
         if "," in image_data:
-            image_data = image_data.split(",")[1]
+            header, image_data = image_data.split(",", 1)
 
-        input_bytes = base64.b64decode(image_data)
+        # Base64 को इमेज बाइट्स में बदलना
+        img_bytes = base64.b64decode(image_data)
+        input_image = Image.open(io.BytesIO(img_bytes))
 
-        # Lazy loading of rembg and model
-        remove = get_remove_fn()
-        output_bytes = remove(input_bytes)
+        # AI मॉडल का इस्तेमाल करके बैकग्राउंड हटाना
+        output_image = remove(input_image, session=model_session)
 
-        img = Image.open(io.BytesIO(output_bytes)).convert("RGBA")
+        # अगर यूजर ने White या Blue बैकग्राउंड सिलेक्ट किया है
+        if target_color in ["white", "blue"]:
+            if target_color == "white":
+                bg_color = (255, 255, 255, 255)  # Pure White
+            else:
+                bg_color = (0, 112, 192, 255)    # Royal Passport Blue
 
-        # Color background addition
-        if color == "white":
-            bg = Image.new("RGBA", img.size, (255, 255, 255, 255))
-            bg.alpha_composite(img)
-            final_img = bg.convert("RGB")
-
-        elif color == "blue":
-            bg = Image.new("RGBA", img.size, (67, 142, 219, 255))
-            bg.alpha_composite(img)
-            final_img = bg.convert("RGB")
-
+            # सॉलिड बैकग्राउंड इमेज बनाना
+            solid_bg = Image.new("RGBA", output_image.size, bg_color)
+            # ट्रांसपेरेंट इमेज को सॉलिड बैकग्राउंड के ऊपर मर्ज करना
+            final_image = Image.alpha_composite(solid_bg, output_image.convert("RGBA"))
         else:
-            # Keep true transparency instead of flattening to black
-            final_img = img
+            final_image = output_image
 
-        buffer = io.BytesIO()
-        final_img.save(buffer, format="PNG")
-        encoded = base64.b64encode(buffer.getvalue()).decode()
+        # वापस Base64 में कन्वर्ट करना ताकि फ्रंटएंड पर भेजा जा सके
+        buffered = io.BytesIO()
+        final_image.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
 
         return jsonify({
             "success": True,
-            "image": "data:image/png;base64," + encoded
+            "image": f"data:image/png;base64,{img_str}"
         })
 
     except Exception as e:
-        return jsonify({
-            "success": False,
-            "message": str(e)
-        }), 500
-
+        print("Error processing image:", str(e))
+        return jsonify({"success": False, "message": str(e)}), 500
 
 if __name__ == "__main__":
-    # Render $PORT environment variable use karta hai, uske liye fallback system
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True, port=5000)

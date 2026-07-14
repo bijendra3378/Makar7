@@ -1,8 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
-from rembg import remove
-
 from PIL import Image
 
 import base64
@@ -12,10 +10,30 @@ app = Flask(__name__)
 
 CORS(app)
 
+# rembg (and its ~50-100MB ONNX model) is imported lazily inside remove_bg(),
+# not at module load time. This keeps app startup fast so Render's health
+# check doesn't time out while the model is downloading/loading. The model
+# is only pulled in the first time someone actually uses AI background removal.
+_remove_fn = None
+
+
+def get_remove_fn():
+    global _remove_fn
+    if _remove_fn is None:
+        from rembg import remove
+        _remove_fn = remove
+    return _remove_fn
+
 
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route("/health")
+def health():
+    # Lightweight endpoint for Render's health checks - does not touch rembg
+    return jsonify({"status": "ok"})
 
 
 @app.route("/remove-bg", methods=["POST"])
@@ -23,7 +41,13 @@ def remove_bg():
 
     try:
 
-        data = request.get_json()
+        data = request.get_json(silent=True)
+
+        if not data or "image" not in data:
+            return jsonify({
+                "success": False,
+                "message": "No image provided"
+            }), 400
 
         image_data = data["image"]
 
@@ -34,24 +58,28 @@ def remove_bg():
 
         input_bytes = base64.b64decode(image_data)
 
+        remove = get_remove_fn()
         output_bytes = remove(input_bytes)
 
         img = Image.open(io.BytesIO(output_bytes)).convert("RGBA")
 
         if color == "white":
             bg = Image.new("RGBA", img.size, (255, 255, 255, 255))
+            bg.alpha_composite(img)
+            final_img = bg.convert("RGB")
 
         elif color == "blue":
             bg = Image.new("RGBA", img.size, (67, 142, 219, 255))
+            bg.alpha_composite(img)
+            final_img = bg.convert("RGB")
 
         else:
-            bg = Image.new("RGBA", img.size, (255, 255, 255, 0))
-
-        bg.alpha_composite(img)
+            # Keep true transparency instead of flattening to black
+            final_img = img
 
         buffer = io.BytesIO()
 
-        bg.convert("RGB").save(buffer, format="PNG")
+        final_img.save(buffer, format="PNG")
 
         encoded = base64.b64encode(buffer.getvalue()).decode()
 
@@ -65,7 +93,7 @@ def remove_bg():
         return jsonify({
             "success": False,
             "message": str(e)
-        })
+        }), 500
 
 
 if __name__ == "__main__":

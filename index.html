@@ -7,9 +7,9 @@
     <title>MAKAR7 HD Passport Photo Maker</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
@@ -127,6 +127,12 @@
             transform: translateY(-3px);
         }
 
+        .buttons button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         #generateBtn { background: #2563eb; }
         #printBtn { background: #f59e0b; }
         #downloadBtn { background: #ef4444; }
@@ -203,7 +209,7 @@
 
     <div class="container">
         <div class="card">
-            
+
             <div class="header">
                 <i class="fa-solid fa-camera"></i>
                 <h1>MAKAR7</h1>
@@ -223,18 +229,18 @@
                 <h2>Crop Photo</h2>
                 <img id="cropImage">
                 <div class="buttons">
-                    <button id="zoomInBtn"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom +</button>
-                    <button id="zoomOutBtn"><i class="fa-solid fa-magnifying-glass-minus"></i> Zoom -</button>
-                    <button id="rotateLeftBtn"><i class="fa-solid fa-rotate-left"></i> Rotate Left</button>
-                    <button id="rotateRightBtn"><i class="fa-solid fa-rotate-right"></i> Rotate Right</button>
-                    <button id="cropApplyBtn"><i class="fa-solid fa-crop"></i> Apply Crop</button>
+                    <button id="zoomInBtn" type="button"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom +</button>
+                    <button id="zoomOutBtn" type="button"><i class="fa-solid fa-magnifying-glass-minus"></i> Zoom -</button>
+                    <button id="rotateLeftBtn" type="button"><i class="fa-solid fa-rotate-left"></i> Rotate Left</button>
+                    <button id="rotateRightBtn" type="button"><i class="fa-solid fa-rotate-right"></i> Rotate Right</button>
+                    <button id="cropApplyBtn" type="button"><i class="fa-solid fa-crop"></i> Apply Crop</button>
                 </div>
             </div>
 
             <div class="buttons">
-                <button id="generateBtn"><i class="fa-solid fa-images"></i> Generate 8 Photos</button>
-                <button id="printBtn"><i class="fa-solid fa-print"></i> Print</button>
-                <button id="downloadBtn"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+                <button id="generateBtn" type="button" disabled><i class="fa-solid fa-images"></i> Generate 8 Photos</button>
+                <button id="printBtn" type="button" disabled><i class="fa-solid fa-print"></i> Print</button>
+                <button id="downloadBtn" type="button" disabled><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
             </div>
 
             <div class="preview">
@@ -244,7 +250,7 @@
 
             <div class="passport-settings">
                 <h3>Passport Settings</h3>
-                
+
                 <label for="quality">Photo Quality</label>
                 <select id="quality">
                     <option value="300">HD 300 DPI</option>
@@ -298,6 +304,8 @@
         let cropper;
         let img = new Image();
         let originalImage = "";
+        let hasCroppedImage = false;
+        let hasGenerated = false;
 
         // Upload & Initialize Cropper
         upload.addEventListener("change", function(e){
@@ -329,10 +337,10 @@
         });
 
         // Cropper Controls
-        zoomInBtn.onclick = () => cropper.zoom(0.1);
-        zoomOutBtn.onclick = () => cropper.zoom(-0.1);
-        rotateLeftBtn.onclick = () => cropper.rotate(-90);
-        rotateRightBtn.onclick = () => cropper.rotate(90);
+        zoomInBtn.onclick = () => cropper && cropper.zoom(0.1);
+        zoomOutBtn.onclick = () => cropper && cropper.zoom(-0.1);
+        rotateLeftBtn.onclick = () => cropper && cropper.rotate(-90);
+        rotateRightBtn.onclick = () => cropper && cropper.rotate(90);
 
         cropApplyBtn.onclick = async function(){
             if(!cropper) return;
@@ -344,6 +352,7 @@
             });
 
             originalImage = croppedCanvas.toDataURL("image/png");
+            hasCroppedImage = true;
             await processBackground();
             cropSection.style.display = "none";
         };
@@ -375,6 +384,10 @@
                     })
                 });
 
+                if(!response.ok){
+                    throw new Error("Server returned status " + response.status);
+                }
+
                 const data = await response.json();
 
                 if(data.success){
@@ -382,7 +395,7 @@
                     status.innerText = "Background Removed Successfully";
                 } else {
                     updatePreview(originalImage);
-                    status.innerText = data.message;
+                    status.innerText = data.message || "Background removal failed (using original)";
                 }
             } catch(err) {
                 console.log(err);
@@ -393,17 +406,20 @@
 
         function updatePreview(src){
             img.onload = function(){
+                canvas.width = 1800;
+                canvas.height = 1200;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = "#ffffff";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 100, 100, 700, 900);
+                generateBtn.disabled = false;
             }
             img.src = src;
         }
 
         // Generate 8 Photos
         generateBtn.onclick = function () {
-            if (!img.src) {
+            if (!img.src || !hasCroppedImage) {
                 alert("Please upload and crop a photo first.");
                 return;
             }
@@ -440,19 +456,22 @@
                     }
                 }
             }
+            hasGenerated = true;
+            printBtn.disabled = false;
+            downloadBtn.disabled = false;
             status.innerText = "8 Passport Photos Generated Successfully.";
         };
 
         // Print Functionality
         printBtn.onclick = function () {
-            if (!img.src) {
+            if (!hasGenerated) {
                 alert("Generate photos first.");
                 return;
             }
 
             const image = canvas.toDataURL("image/jpeg", 1);
             const win = window.open("");
-            
+
             win.document.write(`
                 <html>
                 <body style="margin:0">
@@ -470,7 +489,7 @@
 
         // Download PDF Functionality
         downloadBtn.onclick = function () {
-            if (!img.src) {
+            if (!hasGenerated) {
                 alert("Generate photos first.");
                 return;
             }

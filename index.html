@@ -21,6 +21,7 @@
             background: linear-gradient(135deg, #07111f, #162447, #2563eb);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -39,170 +40,162 @@
             box-shadow: 0 15px 40px rgba(0, 0, 0, .35);
         }
 
-        .header {
+        /* Footer Styles - Size Increased */
+        .footer {
+            margin-top: 30px;
             text-align: center;
             color: #fff;
-            margin-bottom: 25px;
-        }
-
-        .header i {
-            font-size: 60px;
-            color: #60a5fa;
-        }
-
-        .header h1 {
-            font-size: 42px;
-            margin-top: 10px;
-        }
-
-        .header p {
-            opacity: .8;
-        }
-
-        .upload-box label {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            padding: 15px;
+            font-size: 18px; 
+            font-weight: 500;
+            opacity: 0.9;
+        }
+        .footer a { color: #60a5fa; text-decoration: none; transition: 0.3s; cursor: pointer; }
+        .footer a:hover { color: #fff; }
+
+        /* Component Styles */
+        .header { text-align: center; color: #fff; margin-bottom: 25px; }
+        .header i { font-size: 60px; color: #60a5fa; }
+        .header h1 { font-size: 42px; margin-top: 10px; }
+        .header p { opacity: .8; }
+        .upload-box label { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 180px; border: 2px dashed rgba(255, 255, 255, .5); border-radius: 18px; color: #fff; cursor: pointer; transition: .3s; }
+        .upload-box label:hover { background: rgba(255, 255, 255, .08); }
+        .upload-box i { font-size: 55px; margin-bottom: 10px; }
+        #cropSection { margin-top: 25px; }
+        #cropSection h2 { color: #fff; margin-bottom: 15px; text-align: center; }
+        #cropImage { max-width: 100%; display: block; border-radius: 15px; background: #fff; }
+        .buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 15px; margin: 20px 0; }
+        .buttons button { padding: 15px; border: none; border-radius: 12px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: .3s; }
+        .buttons button:hover { transform: translateY(-3px); }
+        #generateBtn { background: #2563eb; }
+        #printBtn { background: #f59e0b; }
+        #downloadBtn { background: #ef4444; }
+        #zoomInBtn, #zoomOutBtn, #rotateLeftBtn, #rotateRightBtn, #cropApplyBtn { background: #16a34a; }
+        .preview { background: #fff; padding: 20px; border-radius: 20px; }
+        .preview h2 { text-align: center; margin-bottom: 15px; }
+        canvas { width: 100%; display: block; border: 2px solid #ddd; border-radius: 12px; background: #fff; }
+        .passport-settings { margin-top: 25px; background: rgba(255, 255, 255, .08); padding: 20px; border-radius: 15px; }
+        .passport-settings h3 { color: #fff; margin-bottom: 15px; }
+        .passport-settings label { display: block; color: #fff; margin-top: 15px; margin-bottom: 8px; }
+        .passport-settings select { width: 100%; padding: 10px; border: none; border-radius: 10px; }
+        #status { text-align: center; color: #fff; margin-top: 20px; }
+
+        /* Modal (Popup) Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
             justify-content: center;
             align-items: center;
-            height: 180px;
-            border: 2px dashed rgba(255, 255, 255, .5);
-            border-radius: 18px;
-            color: #fff;
-            cursor: pointer;
-            transition: .3s;
-        }
-
-        .upload-box label:hover {
-            background: rgba(255, 255, 255, .08);
-        }
-
-        .upload-box i {
-            font-size: 55px;
-            margin-bottom: 10px;
-        }
-
-        #cropSection {
-            margin-top: 25px;
-        }
-
-        #cropSection h2 {
-            color: #fff;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        #cropImage {
-            max-width: 100%;
-            display: block;
-            border-radius: 15px;
-            background: #fff;
-        }
-
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .buttons button {
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: .3s;
-        }
-
-        .buttons button:hover {
-            transform: translateY(-3px);
-        }
-
-        #generateBtn {
-            background: #2563eb;
-        }
-
-        #printBtn {
-            background: #f59e0b;
-        }
-
-        #downloadBtn {
-            background: #ef4444;
-        }
-
-        #zoomInBtn,
-        #zoomOutBtn,
-        #rotateLeftBtn,
-        #rotateRightBtn,
-        #cropApplyBtn {
-            background: #16a34a;
-        }
-
-        .preview {
-            background: #fff;
             padding: 20px;
+        }
+        .modal-content {
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 30px;
             border-radius: 20px;
-        }
-
-        .preview h2 {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        canvas {
+            max-width: 650px;
             width: 100%;
-            display: block;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            background: #fff;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            animation: fadeIn 0.3s ease-in-out;
         }
-
-        .passport-settings {
-            margin-top: 25px;
-            background: rgba(255, 255, 255, .08);
-            padding: 20px;
-            border-radius: 15px;
+        @keyframes fadeIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
-
-        .passport-settings h3 {
-            color: #fff;
+        .modal-header {
+            font-size: 22px;
+            font-weight: 600;
+            color: #60a5fa;
             margin-bottom: 15px;
+            padding-right: 20px;
         }
-
-        .passport-settings label {
-            display: block;
+        .modal-body h4 {
+            color: #60a5fa;
+            margin: 20px 0 8px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .modal-body p {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            opacity: 0.9;
+        }
+        .modal-body ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .modal-body ul li {
+            margin-bottom: 5px;
+        }
+        .modal-body a {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+        .email-highlight {
+            background: rgba(96, 165, 250, 0.1);
+            border: 1px dashed #60a5fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            color: #60a5fa;
+            font-weight: 600;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-btn:hover {
             color: #fff;
-            margin-top: 15px;
-            margin-bottom: 8px;
         }
 
-        .passport-settings select {
-            width: 100%;
-            padding: 10px;
-            border: none;
+        /* Styling Scrollbar inside Modal */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
         }
-
-        #status {
-            text-align: center;
-            color: #fff;
-            margin-top: 20px;
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
         }
 
         @media(max-width:768px) {
-            .card {
-                padding: 18px;
-            }
-
-            .header h1 {
-                font-size: 30px;
-            }
-
-            .buttons {
-                grid-template-columns: 1fr;
-            }
+            .card { padding: 18px; }
+            .header h1 { font-size: 30px; }
+            .buttons { grid-template-columns: 1fr; }
+            .modal-content { padding: 20px; }
+            .modal-header { font-size: 18px; }
         }
     </style>
 </head>
@@ -251,7 +244,6 @@
             <div class="passport-settings">
                 <h3>Settings</h3>
                 <input type="hidden" id="quality" value="300">
-
                 <label>Border</label>
                 <select id="borderSelect">
                     <option value="yes">Enable</option>
@@ -261,50 +253,217 @@
 
             <p id="status">Ready</p>
         </div>
+
+        <footer class="footer">
+            <a id="aboutLink">About us</a>
+            <a id="contactLink">Contact us</a>
+            <a id="privacyLink">Privacy Policy</a>
+            <a id="termsLink">Terms and Conditions</a>
+        </footer>
+    </div>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeAbout">&times;</span>
+            <div class="modal-header">Welcome to MAKAR7 – Professional HD Passport Photo Maker</div>
+            <div class="modal-body">
+                <p>MAKAR7 is a free online passport photo maker designed to help users create high-quality passport photos quickly and easily. Our goal is to provide a simple, reliable, and user-friendly tool that works directly in your web browser without requiring complicated software.</p>
+                <p>With MAKAR7, you can upload your photo, generate correctly sized passport photos download them as a high-quality PDF for printing. The website is designed to work smoothly on both desktop and mobile devices.</p>
+                <p>We are committed to providing a fast, secure, and convenient experience while continuously improving our services and adding new features. Thank you for choosing MAKAR7 for your passport photo needs.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeContact">&times;</span>
+            <div class="modal-header">Contact MAKAR7 Support</div>
+            <div class="modal-body">
+                <p>Thank you for visiting MAKAR7 – Professional HD Passport Photo Maker.</p>
+                <p>We value your feedback and are always happy to assist you. If you have any questions, suggestions, or need support while using our passport photo maker, please contact us.</p>
+                
+                <p>
+                    <strong>Email Us:</strong><br>
+                    <span class="email-highlight">makar7passportsizephotomaker@gmail.com</span>
+                </p>
+
+                <p>We aim to respond to all inquiries within 24–48 hours.</p>
+                <p>Whether you need technical support, want to report a problem, or have suggestions to improve our service, we appreciate hearing from you.</p>
+                <p>Thank you for choosing MAKAR7. We are committed to providing a fast, reliable, and easy-to-use passport photo creation experience.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closePrivacy">&times;</span>
+            <div class="modal-header">Privacy Policy</div>
+            <div class="modal-body">
+                <p><strong>Last Updated:</strong> July 15, 2026</p>
+                <p>Welcome to MAKAR7 – Professional HD Passport Photo Maker. Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you use our website.</p>
+                
+                <h4>Information We Collect</h4>
+                <ul>
+                    <li>Photos uploaded by users for passport photo creation.</li>
+                    <li>Basic technical information such as browser type, device type, and IP address.</li>
+                    <li>Cookies and analytics data to improve website performance.</li>
+                </ul>
+
+                <h4>How We Use Your Information</h4>
+                <p>We use your information to:</p>
+                <ul>
+                    <li>Provide passport photo creation services.</li>
+                    <li>Improve website performance and user experience.</li>
+                    <li>Respond to support requests.</li>
+                    <li>Maintain the security of our website.</li>
+                </ul>
+
+                <h4>Uploaded Photos</h4>
+                <p>Your uploaded photos are used only to generate passport photos. We do not permanently store your photos on our servers unless specifically stated.</p>
+
+                <h4>Cookies</h4>
+                <p>Our website may use cookies to improve your browsing experience and analyze website traffic.</p>
+
+                <h4>Google AdSense</h4>
+                <p>We may display advertisements provided by Google AdSense. Google and its partners may use cookies to serve personalized or non-personalized ads based on your visits. For more information, please visit Google's Privacy Policy: <a href="https://policies.google.com/privacy" target="_blank">https://policies.google.com/privacy</a></p>
+
+                <h4>Third-Party Services</h4>
+                <p>We may use trusted third-party services such as Google Analytics and Google AdSense to improve our website.</p>
+
+                <h4>Data Security</h4>
+                <p>We take reasonable measures to protect your information from unauthorized access or misuse.</p>
+
+                <h4>Changes to This Privacy Policy</h4>
+                <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page.</p>
+
+                <h4>Contact Us</h4>
+                <p>If you have any questions about this Privacy Policy, please contact us:</p>
+                <p>
+                    Email: <span class="email-highlight">makar7passportsizephotomaker@gmail.com</span><br>
+                    Website: <a href="https://makar7.com" target="_blank">https://makar7.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms and Conditions Modal -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeTerms">&times;</span>
+            <div class="modal-header">Terms & Conditions</div>
+            <div class="modal-body">
+                <p><strong>Last Updated:</strong> July 15, 2026</p>
+                <p>Welcome to MAKAR7 – Professional HD Passport Photo Maker. By accessing or using this website, you agree to comply with these Terms & Conditions.</p>
+
+                <h4>Use of the Website</h4>
+                <p>MAKAR7 provides an online tool for creating passport, visa, and ID photos. You agree to use the website only for lawful purposes and in accordance with applicable laws.</p>
+
+                <h4>User Responsibilities</h4>
+                <p>You are responsible for ensuring that you have the right to upload and use any image submitted to the website. You must not upload illegal, harmful, or copyrighted content without permission.</p>
+
+                <h4>Intellectual Property</h4>
+                <p>All website content, including text, graphics, logos, designs, and software, is owned by MAKAR7 or its licensors and is protected by applicable intellectual property laws.</p>
+
+                <h4>Service Availability</h4>
+                <p>We strive to keep our services available and accurate. However, we do not guarantee uninterrupted, error-free, or continuous operation and may modify or discontinue features without prior notice.</p>
+
+                <h4>Limitation of Liability</h4>
+                <p>The website and its services are provided on an "as is" and "as available" basis. MAKAR7 shall not be liable for any direct, indirect, incidental, or consequential damages arising from the use of this website.</p>
+
+                <h4>Changes to the Terms</h4>
+                <p>We reserve the right to update these Terms & Conditions at any time. Continued use of the website after changes are posted constitutes acceptance of the revised terms.</p>
+
+                <h4>Governing Law</h4>
+                <p>These Terms & Conditions shall be governed by the applicable laws of the country or region in which the website operates.</p>
+
+                <h4>Contact Us</h4>
+                <p>If you have any questions regarding these Terms & Conditions, please contact us at:</p>
+                <p>
+                    Email: <span class="email-highlight">makar7passportsizephotomaker@gmail.com</span>
+                </p>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
-
     <script>
+        // Modal Selectors
+        const aboutLink = document.getElementById("aboutLink");
+        const contactLink = document.getElementById("contactLink");
+        const privacyLink = document.getElementById("privacyLink");
+        const termsLink = document.getElementById("termsLink");
+        
+        const aboutModal = document.getElementById("aboutModal");
+        const contactModal = document.getElementById("contactModal");
+        const privacyModal = document.getElementById("privacyModal");
+        const termsModal = document.getElementById("termsModal");
+        
+        const closeAbout = document.getElementById("closeAbout");
+        const closeContact = document.getElementById("closeContact");
+        const closePrivacy = document.getElementById("closePrivacy");
+        const closeTerms = document.getElementById("closeTerms");
+
+        // Open Modal Events
+        aboutLink.onclick = () => aboutModal.style.display = "flex";
+        contactLink.onclick = () => contactModal.style.display = "flex";
+        privacyLink.onclick = () => privacyModal.style.display = "flex";
+        termsLink.onclick = () => termsModal.style.display = "flex";
+
+        // Close Modal Events
+        closeAbout.onclick = () => aboutModal.style.display = "none";
+        closeContact.onclick = () => contactModal.style.display = "none";
+        closePrivacy.onclick = () => privacyModal.style.display = "none";
+        closeTerms.onclick = () => termsModal.style.display = "none";
+
+        // Close when clicking outside of modal
+        window.onclick = function(event) {
+            if (event.target == aboutModal) {
+                aboutModal.style.display = "none";
+            }
+            if (event.target == contactModal) {
+                contactModal.style.display = "none";
+            }
+            if (event.target == privacyModal) {
+                privacyModal.style.display = "none";
+            }
+            if (event.target == termsModal) {
+                termsModal.style.display = "none";
+            }
+        }
+
+        // Existing Core logic
         const upload = document.getElementById("upload");
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
-
         const cropSection = document.getElementById("cropSection");
         const cropImage = document.getElementById("cropImage");
-
         const zoomInBtn = document.getElementById("zoomInBtn");
         const zoomOutBtn = document.getElementById("zoomOutBtn");
         const rotateLeftBtn = document.getElementById("rotateLeftBtn");
         const rotateRightBtn = document.getElementById("rotateRightBtn");
         const cropApplyBtn = document.getElementById("cropApplyBtn");
-
         const generateBtn = document.getElementById("generateBtn");
         const quality = document.getElementById("quality");
         const borderSelect = document.getElementById("borderSelect");
         const status = document.getElementById("status");
-
         const printBtn = document.getElementById("printBtn");
         const downloadBtn = document.getElementById("downloadBtn");
 
         let cropper;
         let img = new Image();
         
-        const selectedPaper = "4x6"; 
-
         upload.addEventListener("change", function (e) {
             const file = e.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function (event) {
                 cropSection.style.display = "block";
                 cropImage.src = event.target.result;
-
                 cropImage.onload = function () {
-                    if (cropper) {
-                        cropper.destroy();
-                    }
+                    if (cropper) cropper.destroy();
                     cropper = new Cropper(cropImage, {
                         aspectRatio: 35 / 45,
                         viewMode: 1,
@@ -320,31 +479,18 @@
             reader.readAsDataURL(file);
         });
 
-        zoomInBtn.onclick = function () {
-            if (cropper) cropper.zoom(0.1);
-        };
-
-        zoomOutBtn.onclick = function () {
-            if (cropper) cropper.zoom(-0.1);
-        };
-
-        rotateLeftBtn.onclick = function () {
-            if (cropper) cropper.rotate(-90);
-        };
-
-        rotateRightBtn.onclick = function () {
-            if (cropper) cropper.rotate(90);
-        };
+        zoomInBtn.onclick = () => { if (cropper) cropper.zoom(0.1); };
+        zoomOutBtn.onclick = () => { if (cropper) cropper.zoom(-0.1); };
+        rotateLeftBtn.onclick = () => { if (cropper) cropper.rotate(-90); };
+        rotateRightBtn.onclick = () => { if (cropper) cropper.rotate(90); };
 
         cropApplyBtn.onclick = function () {
             if (!cropper) return;
-
             const croppedCanvas = cropper.getCroppedCanvas({
                 width: 700,
                 height: 900,
                 imageSmoothingQuality: "high"
             });
-
             img.onload = function () {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = "#ffffff";
@@ -352,43 +498,30 @@
                 ctx.drawImage(img, 100, 100, 700, 900);
             };
             img.src = croppedCanvas.toDataURL("image/png");
-
             cropSection.style.display = "none";
             status.innerText = "Photo cropped successfully. Click 'Generate 8 Photos' below.";
         };
 
         generateBtn.onclick = function () {
-            if (!img.src) {
-                alert("Please upload and crop a photo first.");
-                return;
-            }
-
+            if (!img.src) { alert("Please upload and crop a photo first."); return; }
             const dpi = parseInt(quality.value);
             const photoW = (35 / 25.4) * dpi;
             const photoH = (45 / 25.4) * dpi;
-
             const cols = 4;
             const rows = 2;
             const gap = 40;
-
             canvas.width = 1800;
             canvas.height = 1200;
-
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
             const totalWidth = cols * photoW + (cols - 1) * gap;
-            
             const startX = (canvas.width - totalWidth) / 2;
             const startY = 70; 
-
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
                     let x = startX + c * (photoW + gap);
                     let y = startY + r * (photoH + gap);
-
                     ctx.drawImage(img, x, y, photoW, photoH);
-
                     if (borderSelect.value === "yes") {
                         ctx.strokeStyle = "#666";
                         ctx.lineWidth = 3;
@@ -399,27 +532,15 @@
             status.innerText = "8 Passport Photos Generated Successfully.";
         };
 
-        // Improved Print Functionality[span_1](start_span)[span_1](end_span)
         printBtn.onclick = function () {
-            if (!img.src) {
-                alert("Generate photos first.");
-                return;
-            }
-
+            if (!img.src) { alert("Generate photos first."); return; }
             const image = canvas.toDataURL("image/jpeg", 1);
             const win = window.open("", "_blank");
-
             win.document.write(`
                 <html>
-                <head>
-                    <title>Print Passport Photos</title>
-                    <style>
-                        body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-                        img { max-width: 100%; height: auto; }
-                    </style>
-                </head>
-                <body>
-                    <img src="${image}" onload="window.print(); window.close();">
+                <head><title>Print Passport Photos</title></head>
+                <body style="margin:0; padding:0; display:flex; justify-content:center; align-items:center; min-height:100vh;">
+                <img src="${image}" style="width:100%;" onload="window.print(); window.close();">
                 </body>
                 </html>
             `);
@@ -427,18 +548,13 @@
         };
 
         downloadBtn.onclick = function () {
-            if (!img.src) {
-                alert("Generate photos first.");
-                return;
-            }
-
+            if (!img.src) { alert("Generate photos first."); return; }
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF({
                 orientation: "landscape",
                 unit: "mm",
                 format: [102, 152] 
             });
-
             const image = canvas.toDataURL("image/jpeg", 1);
             pdf.addImage(image, "JPEG", 0, 0, 152, 102);
             pdf.save("MAKAR7-HD-Passport-Photo.pdf");

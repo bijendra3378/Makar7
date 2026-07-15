@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="google-site-verification" content="EY6Zad842ktm-smtiVoeq7Ya9vjKGKC9s6WAmS5smPY" />
     <title>MAKAR7 HD Passport Photo Maker</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -251,7 +250,6 @@
 
             <div class="passport-settings">
                 <h3>Settings</h3>
-                <!-- Hidden input set to 300 -->
                 <input type="hidden" id="quality" value="300">
 
                 <label>Border</label>
@@ -292,10 +290,8 @@
         let cropper;
         let img = new Image();
         
-        // Background Process maintains 4x6 strictly
         const selectedPaper = "4x6"; 
 
-        // Upload Image
         upload.addEventListener("change", function (e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -324,27 +320,22 @@
             reader.readAsDataURL(file);
         });
 
-        // Zoom In
         zoomInBtn.onclick = function () {
             if (cropper) cropper.zoom(0.1);
         };
 
-        // Zoom Out
         zoomOutBtn.onclick = function () {
             if (cropper) cropper.zoom(-0.1);
         };
 
-        // Rotate Left
         rotateLeftBtn.onclick = function () {
             if (cropper) cropper.rotate(-90);
         };
 
-        // Rotate Right
         rotateRightBtn.onclick = function () {
             if (cropper) cropper.rotate(90);
         };
 
-        // Apply Crop
         cropApplyBtn.onclick = function () {
             if (!cropper) return;
 
@@ -366,7 +357,6 @@
             status.innerText = "Photo cropped successfully. Click 'Generate 8 Photos' below.";
         };
 
-        // Generate Grid (Processes 4x6 Canvas layout automatically)
         generateBtn.onclick = function () {
             if (!img.src) {
                 alert("Please upload and crop a photo first.");
@@ -381,7 +371,6 @@
             const rows = 2;
             const gap = 40;
 
-            // Dimensions structured for 4x6 Sheet layout
             canvas.width = 1800;
             canvas.height = 1200;
 
@@ -391,7 +380,6 @@
             const totalWidth = cols * photoW + (cols - 1) * gap;
             
             const startX = (canvas.width - totalWidth) / 2;
-            // startY को 100 से घटाकर 70 किया गया है ताकि फ़ोटो ऊपर की तरफ शिफ्ट हो जाएँ
             const startY = 70; 
 
             for (let r = 0; r < rows; r++) {
@@ -411,7 +399,7 @@
             status.innerText = "8 Passport Photos Generated Successfully.";
         };
 
-        // Print Functionality
+        // Improved Print Functionality[span_1](start_span)[span_1](end_span)
         printBtn.onclick = function () {
             if (!img.src) {
                 alert("Generate photos first.");
@@ -419,24 +407,25 @@
             }
 
             const image = canvas.toDataURL("image/jpeg", 1);
-            const win = window.open("");
+            const win = window.open("", "_blank");
+
             win.document.write(`
                 <html>
-                <head><title>Print</title></head>
-                <body style="margin:0;">
-                <img src="${image}" style="width:100%;">
-                <script>
-                window.onload=function(){
-                    window.print();
-                    window.close();
-                }
-                <\/script>
+                <head>
+                    <title>Print Passport Photos</title>
+                    <style>
+                        body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+                        img { max-width: 100%; height: auto; }
+                    </style>
+                </head>
+                <body>
+                    <img src="${image}" onload="window.print(); window.close();">
                 </body>
                 </html>
             `);
+            win.document.close();
         };
 
-        // Download PDF Functionality (Processes 4x6 landscape document)
         downloadBtn.onclick = function () {
             if (!img.src) {
                 alert("Generate photos first.");

@@ -4,7 +4,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9944167040845795" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="google-site-verification" content="EY6Zad842ktm-smtiVoeq7Ya9vjKGKC9s6WAmS5smPY" />
+    <meta name="google-site-verification" content="EY6Zad842ktm-smtiVoeq7Ya9vjKGKC9s6WAmS5smPY" />
     <title>MAKAR7 - Professional HD Passport Photo Maker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
@@ -35,12 +35,12 @@
         #zoomInBtn, #zoomOutBtn, #rotateLeftBtn, #rotateRightBtn { background: #4b5563; }
         .crop-apply-container { width: 100%; display: flex; justify-content: center; margin-top: 20px; }
         #cropApplyBtn { background: linear-gradient(135deg, #10b981, #059669); padding: 18px 40px; font-size: 18px; font-weight: 700; border: none; border-radius: 16px; color: #fff; cursor: pointer; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); width: 100%; max-width: 400px; }
-        
+
         .preview { background: #fff; padding: 20px; border-radius: 20px; margin-top: 20px; }
         .preview h2 { text-align: center; margin-bottom: 15px; color: #333; }
         .canvas-container { width: 100%; display: flex; justify-content: center; align-items: center; background: #e5e7eb; padding: 15px; border-radius: 12px; min-height: 300px; overflow: hidden; }
         canvas { max-width: 100%; height: auto; display: block; border: 2px solid #ddd; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
+
         .passport-settings { margin-top: 25px; background: rgba(255, 255, 255, .08); padding: 20px; border-radius: 15px; }
         .passport-settings h3 { color: #fff; margin-bottom: 15px; }
         .passport-settings label { display: block; color: #fff; margin-top: 15px; margin-bottom: 8px; }
@@ -114,7 +114,7 @@
         .modal-content ul { margin: 0 0 15px 0; padding-left: 20px; text-align: left; }
         .modal-content li { font-size: 13.5px; color: #d1d5db; line-height: 1.6; margin-bottom: 6px; }
         .last-updated { font-size: 11.5px !important; color: #6b7280 !important; margin-top: -5px; margin-bottom: 15px; }
-        
+
         .email-box { background: #1f2937; padding: 14px; border-radius: 8px; margin: 18px 0; border: 1px dashed #38bdf8; text-align: left; }
         .email-box strong { color: #9ca3af; font-size: 12px; text-transform: uppercase; display: inline-block; margin-bottom: 4px; }
         .email-box a { color: #38bdf8; text-decoration: none; font-weight: 600; font-size: 14px; }
@@ -170,20 +170,16 @@
 
             <div class="passport-settings">
                 <h3>Passport Settings</h3>
-                
-                <div style="display: none;">
-                    <label>Photo Quality</label>
-                    <select id="qualitySelect">
-                        <option value="300" selected>HD 300 DPI</option>
-                    </select>
-                </div>
+
+                <!-- Hidden Input to secure 300 DPI logic processing without UI exposure -->
+                <input type="hidden" id="qualitySelect" value="300">
 
                 <label>Paper Size</label>
                 <select id="paperSizeSelect">
                     <option value="4x6">4x6 Inch (102 x 152 mm)</option>
                     <option value="a4">A4 (210 x 297 mm) - Portrait</option>
                 </select>
-                
+
                 <label>Border</label>
                 <select id="borderSelect">
                     <option value="yes">Enable Border</option>
@@ -205,7 +201,7 @@
     </footer>
 
     <!-- POPUP MODALS INFRASTRUCTURE -->
-    
+
     <!-- A. About Us Modal -->
     <div id="about-modal" class="custom-modal" onclick="handleOutsideClick(event, 'about-modal')">
         <div class="modal-content">
@@ -242,7 +238,7 @@
             <h2>Privacy Policy</h2>
             <p class="last-updated">Last Updated: July 17, 2026</p>
             <p>Welcome to MAKAR7 – Professional HD Passport Photo Maker. Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you use our website.</p>
-            
+
             <h3>Information We Collect</h3>
             <ul>
                 <li>Photos uploaded by users for passport photo creation.</li>
@@ -288,7 +284,7 @@
         <div class="modal-content scrollable">
             <span class="close-btn" onclick="closeModal('terms-modal')">&times;</span>
             <h2>Terms & Conditions</h2>
-            <p class="last-updated">Last Updated: July 15, 2026</p>
+            <p class="last-updated">Last Updated: July 17, 2026</p>
             <p>Welcome to MAKAR7 – Professional HD Passport Photo Maker. By accessing or using this website, you agree to comply with these Terms & Conditions.</p>
 
             <h3>Use of the Website</h3>
@@ -330,6 +326,7 @@
         const generateBtn = document.getElementById("generateBtn");
         const generateBtnText = document.getElementById("generateBtnText");
         const paperSizeSelect = document.getElementById("paperSizeSelect");
+        const qualitySelect = document.getElementById("qualitySelect");
         const borderSelect = document.getElementById("borderSelect");
         const status = document.getElementById("status");
         const printBtn = document.getElementById("printBtn");
@@ -339,11 +336,11 @@
         let img = new Image();
 
         function updateCanvasDimensions() {
+            // Fixed processing output scale at high quality 300 DPI layout architecture
             if (paperSizeSelect.value === "4x6") {
                 canvas.width = 1800;  
                 canvas.height = 1200; 
             } else {
-                // Standard A4 dimensions at 300 DPI
                 canvas.width = 2480;  
                 canvas.height = 3508; 
             }
@@ -366,14 +363,13 @@
                 cropSection.style.display = "block";
                 cropImage.src = event.target.result;
                 if (cropper) cropper.destroy();
-                // Standard 35:45 passport photo aspect ratio lock
                 cropper = new Cropper(cropImage, { aspectRatio: 35 / 45, viewMode: 1 });
             };
             reader.readAsDataURL(file);
         });
 
         cropApplyBtn.onclick = () => {
-            // Generates clean pixel output corresponding to 35x45mm scale at 300 DPI
+            // Processing high resolution pixels for 35x45mm scale at true 300 DPI
             const croppedCanvas = cropper.getCroppedCanvas({ width: 413, height: 531 });
             img.onload = () => {
                 updateCanvasDimensions();
@@ -388,13 +384,12 @@
 
         generateBtn.onclick = () => {
             if (!img.src) { alert("Please upload and crop a photo first."); return; }
-            
+
             updateCanvasDimensions();
-            
-            // Fixed dimensions ensuring exactly 35mm x 45mm physical layout on print output
+
             const photoW = 413; 
             const photoH = 531; 
-            
+
             let gap, startY;
             const cols = 4;
             const rows = 2;
@@ -405,9 +400,9 @@
                 startY = (canvas.height - totalHeight) / 2;
             } else {
                 gap = 60;   
-                startY = 200; // Optimized spacing architecture for modern A4 margins
+                startY = 200; 
             }
-            
+
             const totalWidth = (cols * photoW) + ((cols - 1) * gap);
             const startX = (canvas.width - totalWidth) / 2;
 
@@ -415,9 +410,9 @@
                 for (let c = 0; c < cols; c++) {
                     let x = startX + c * (photoW + gap);
                     let y = startY + r * (photoH + gap);
-                    
+
                     ctx.drawImage(img, x, y, photoW, photoH);
-                    
+
                     if (borderSelect.value === "yes") {
                         ctx.strokeStyle = "#000000";
                         ctx.lineWidth = paperSizeSelect.value === "4x6" ? 4 : 5; 
@@ -426,7 +421,7 @@
                 }
             }
 
-            status.innerText = "8 Photos Generated! Placed perfectly at 35x45mm standard scale format.";
+            status.innerText = "8 Photos Generated! Placed perfectly at standard scale format (300 DPI).";
         };
 
         printBtn.onclick = function () {
@@ -434,7 +429,7 @@
             const dataUrl = canvas.toDataURL("image/jpeg", 1.0);
             const win = window.open("", "_blank");
             const isA4 = paperSizeSelect.value === "a4";
-            
+
             win.document.write(`
                 <html>
                 <head>
@@ -456,7 +451,7 @@
         downloadBtn.onclick = function () {
             if (!img.src) { alert("Generate photos first."); return; }
             const { jsPDF } = window.jspdf;
-            
+
             let pdf;
             const image = canvas.toDataURL("image/jpeg", 1.0);
 
@@ -467,8 +462,8 @@
                 pdf = new jsPDF("portrait", "mm", "a4");
                 pdf.addImage(image, "JPEG", 0, 0, 210, 297);
             }
-            
-            pdf.save(`MAKAR7-8Photos-${paperSizeSelect.value.toUpperCase()}.pdf`);
+
+            pdf.save(`MAKAR7-8Photos-${paperSizeSelect.value.toUpperCase()}-300DPI.pdf`);
         };
 
         document.getElementById("zoomInBtn").onclick = () => cropper.zoom(0.1);

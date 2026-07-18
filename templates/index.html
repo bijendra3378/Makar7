@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="EY6Zad842ktm-smtiVoeq7Ya9vjKGKC9s6WAmS5smPY" />
-    <title>MAKAR7 - Passport Photo Maker</title>
+    <title>Passport Photo Maker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -14,7 +14,6 @@
         /* ===== MAIN APPLICATION STYLES ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-        /* PREMIUM LOW-BRIGHTNESS DARK BACKGROUND */
         body { 
             background: linear-gradient(135deg, #090d16, #111827, #1e293b); 
             min-height: 100vh; 
@@ -48,7 +47,6 @@
         .crop-apply-container { width: 100%; display: flex; justify-content: center; margin-top: 20px; }
         #cropApplyBtn { background: linear-gradient(135deg, #059669, #047857); padding: 18px 40px; font-size: 18px; font-weight: 700; border: none; border-radius: 16px; color: #fff; cursor: pointer; box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3); width: 100%; max-width: 400px; }
 
-        /* FIXED: 2nd IMAGE JAISA WHITE CLEAN CARD DESIGN */
         .preview { background: #ffffff; padding: 25px; border-radius: 20px; margin-top: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
         .preview h2 { text-align: center; margin-bottom: 20px; color: #1e293b; font-weight: 600; }
         .canvas-container { width: 100%; display: flex; justify-content: center; align-items: center; background: #ffffff; padding: 10px; border-radius: 12px; border: 1px solid #e2e8f0; min-height: 300px; overflow: hidden; }
@@ -112,13 +110,11 @@
         .custom-modal.show .modal-content { transform: scale(1); }
         .modal-content.scrollable { max-height: 75vh; overflow-y: auto; padding-right: 15px; }
 
-        /* Custom Modern Scrollbar Design */
         .modal-content.scrollable::-webkit-scrollbar { width: 6px; }
         .modal-content.scrollable::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
         .modal-content.scrollable::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
         .modal-content.scrollable::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
-        /* Close Button (X icon) */
         .close-btn { color: #9ca3af; position: absolute; top: 18px; right: 22px; font-size: 26px; font-weight: 400; cursor: pointer; transition: color 0.2s, transform 0.2s; line-height: 1; }
         .close-btn:hover { color: #ffffff; transform: rotate(90deg); }
 
@@ -137,7 +133,6 @@
 </head>
 <body>
 
-    <!-- MAIN APPLICATION CONTAINER -->
     <div class="container">
         <div class="card">
             <div class="header">
@@ -175,7 +170,6 @@
                 <button id="downloadBtn"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
             </div>
 
-            <!-- PREVIEW CARD CHANGER TO WHITE (AS PER IMAGE 2) -->
             <div class="preview">
                 <h2>Passport Photo Preview</h2>
                 <div class="canvas-container">
@@ -209,7 +203,6 @@
         </div>
     </div>
 
-    <!-- SITE FOOTER LINKS -->
     <footer class="footer-container">
         <div class="footer-links">
             <a href="#" onclick="openModal('about-modal'); return false;">About us</a>
@@ -218,8 +211,6 @@
             <a href="#" onclick="openModal('terms-modal'); return false;">Terms and Conditions</a>
         </div>
     </footer>
-
-    <!-- POPUP MODALS INFRASTRUCTURE -->
 
     <!-- A. About Us Modal -->
     <div id="about-modal" class="custom-modal" onclick="handleOutsideClick(event, 'about-modal')">
@@ -238,10 +229,9 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('contact-modal')">&times;</span>
             <h2>Contact MAKAR7 Support</h2>
-            <p>Thank you for visiting MAKAR7 – Professional HD Passport Photo Maker.</p>
+            <p>Thank you for visiting MAKAR7 – Passport Photo Maker.</p>
             <p>We value your feedback and are always happy to assist you. If you have any questions, suggestions, or need support while using our passport photo maker, please contact us.</p>
             <div class="email-box">
-                <strong>Email Us:</strong><br>
                 <a href="mailto:makar7passportsizephotomaker@gmail.com">makar7passportsizephotomaker@gmail.com</a>
             </div>
             <p>We aim to respond to all inquiries within 24–48 hours.</p>
@@ -256,7 +246,7 @@
             <span class="close-btn" onclick="closeModal('privacy-modal')">&times;</span>
             <h2>Privacy Policy</h2>
             <p class="last-updated">Last Updated: July 18, 2026</p>
-            <p>Welcome to MAKAR7 – Professional HD Passport Photo Maker. Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you use our website.</p>
+            <p>Welcome to MAKAR7 – Passport Photo Maker. Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you use our website.</p>
 
             <h3>Information We Collect</h3>
             <ul>
@@ -304,10 +294,10 @@
             <span class="close-btn" onclick="closeModal('terms-modal')">&times;</span>
             <h2>Terms & Conditions</h2>
             <p class="last-updated">Last Updated: July 18, 2026</p>
-            <p>Welcome to MAKAR7 – Professional HD Passport Photo Maker. By accessing or using this website, you agree to comply with these Terms & Conditions.</p>
+            <p>Welcome to MAKAR7 – Passport Photo Maker. By accessing or using this website, you agree to comply with these Terms & Conditions.</p>
 
             <h3>Use of the Website</h3>
-            <p>MAKAR7 provides an online tool for creating passport, visa, and ID photos. You agree to use the website only for lawful purposes and in accordance with applicable laws.</p>
+            <p>MAKAR7 provides an online tool for creating passport photos. You agree to use the website only for lawful purposes and in accordance with applicable laws.</p>
 
             <h3>User Responsibilities</h3>
             <p>You are responsible for ensuring that you have the right to upload and use any image submitted to the website. You must not upload illegal, harmful, or copyrighted content without permission.</p>
@@ -335,7 +325,6 @@
     <!-- SCRIPTS CONFIGURATION -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
     <script>
-        // --- Passport Photo Maker App Logic ---
         const upload = document.getElementById("upload");
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
@@ -440,20 +429,25 @@
             status.innerText = "8 Photos Generated! Placed perfectly at 35x45mm standard scale format.";
         };
 
+        // ===== 300 DPI HIGH QUALITY PRINT ENGINE =====
         printBtn.onclick = function () {
             if (!img.src) { alert("Generate photos first."); return; }
             const dataUrl = canvas.toDataURL("image/jpeg", 1.0);
             const win = window.open("", "_blank");
             const isA4 = paperSizeSelect.value === "a4";
 
+            // Pixel ratios standard metric matching
+            const widthCSS = isA4 ? '210mm' : '152mm';
+            const heightCSS = isA4 ? '297mm' : '102mm';
+
             win.document.write(`
                 <html>
                 <head>
-                    <title>Print Passport Photos</title>
+                    <title>Print Passport Photos (300 DPI)</title>
                     <style>
                         @page { size: ${isA4 ? 'A4 portrait' : '6in 4in landscape'}; margin: 0; }
-                        body { margin: 0; display: flex; justify-content: center; align-items: ${isA4 ? 'flex-start' : 'center'}; background: #fff; }
-                        img { width: ${isA4 ? '210mm' : '100vw'}; height: auto; display: block; }
+                        body { margin: 0; display: flex; justify-content: center; align-items: center; background: #fff; }
+                        img { width: ${widthCSS}; height: ${heightCSS}; display: block; image-rendering: -webkit-optimize-contrast; }
                     </style>
                 </head>
                 <body onload="window.print(); window.close();">
@@ -464,6 +458,7 @@
             win.document.close();
         };
 
+        // ===== 300 DPI MAXIMUM DENSITY PDF ENGINE =====
         downloadBtn.onclick = function () {
             if (!img.src) { alert("Generate photos first."); return; }
             const { jsPDF } = window.jspdf;
@@ -471,15 +466,26 @@
             let pdf;
             const image = canvas.toDataURL("image/jpeg", 1.0);
 
+            // 'NONE' passing explicitly stops compression algorithms from breaking down DPI structure
             if (paperSizeSelect.value === "4x6") {
-                pdf = new jsPDF("landscape", "mm", [102, 152]);
-                pdf.addImage(image, "JPEG", 0, 0, 152, 102);
+                pdf = new jsPDF({
+                    orientation: "landscape",
+                    unit: "mm",
+                    format: [102, 152],
+                    compress: true
+                });
+                pdf.addImage(image, "JPEG", 0, 0, 152, 102, undefined, 'NONE');
             } else {
-                pdf = new jsPDF("portrait", "mm", "a4");
-                pdf.addImage(image, "JPEG", 0, 0, 210, 297);
+                pdf = new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4",
+                    compress: true
+                });
+                pdf.addImage(image, "JPEG", 0, 0, 210, 297, undefined, 'NONE');
             }
 
-            pdf.save(`MAKAR7-8Photos-${paperSizeSelect.value.toUpperCase()}.pdf`);
+            pdf.save(`MAKAR7-300DPI-${paperSizeSelect.value.toUpperCase()}.pdf`);
         };
 
         document.getElementById("zoomInBtn").onclick = () => cropper.zoom(0.1);
@@ -487,7 +493,6 @@
         document.getElementById("rotateLeftBtn").onclick = () => cropper.rotate(-90);
         document.getElementById("rotateRightBtn").onclick = () => cropper.rotate(90);
 
-        // --- Footer Modals Animation Logic ---
         function openModal(modalId) {
             var modal = document.getElementById(modalId);
             modal.style.display = "block";

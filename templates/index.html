@@ -85,7 +85,7 @@
         .info-card h2 { margin-top: 0; font-size: 22px; font-weight: 600; color: #38bdf8; border-bottom: 1px solid #1e293b; padding-bottom: 12px; margin-bottom: 15px; text-align: left; }
         .info-card h3 { font-size: 16px; font-weight: 600; color: #38bdf8; margin-top: 20px; margin-bottom: 8px; text-align: left; }
         .info-card p { font-size: 14px; color: #cbd5e1; line-height: 1.6; margin-bottom: 12px; text-align: left; }
-        .info-card ul { margin: 0 0 15px 0; padding-left: 20px; text-align: left; }
+        .info-card ul, .info-card ol { margin: 0 0 15px 0; padding-left: 20px; text-align: left; }
         .info-card li { font-size: 14px; color: #cbd5e1; line-height: 1.6; margin-bottom: 6px; }
         .last-updated { font-size: 12px !important; color: #64748b !important; margin-top: -5px; margin-bottom: 15px; }
 
@@ -206,6 +206,19 @@
     <!-- VISIBLE CONTENT SECTIONS WITH ID FOR SMOOTH SCROLLING -->
     <div class="info-sections-container">
 
+        <!-- How To Use -->
+        <div class="info-card" id="how-to-use">
+            <h2>How to Use</h2>
+            <p>Creating passport-size photos with MAKAR7 Passport Photo Maker is quick and easy. Follow these simple steps:</p>
+            <ol>
+                <li><strong>Upload Your Photo:</strong> Click the <i>Upload Photo</i> button and select a JPG or PNG image from your device.</li>
+                <li><strong>Crop Your Photo:</strong> Adjust the crop area so your face is centered and clearly visible. Use the Zoom and Move controls, then click <i>Apply Crop</i>.</li>
+                <li><strong>Generate Passport Photos:</strong> Click <i>Generate 8 Photos</i> to automatically create perfectly arranged passport-size photos.</li>
+                <li><strong>Preview Your Photos:</strong> Review the generated passport photos to ensure the alignment and quality meet your requirements.</li>
+                <li><strong>Download or Print:</strong> Click <i>Download PDF</i> to save a high-quality printable PDF, or select <i>Print</i> to print directly from your browser.</li>
+            </ol>
+        </div>
+
         <!-- A. About Us -->
         <div class="info-card" id="about">
             <h2>About Us</h2>
@@ -300,6 +313,8 @@
     <!-- FOOTER WITH NAVIGATION LINKS -->
     <footer>
         <div class="footer-nav">
+            <a href="#how-to-use">How to Use</a>
+            <span>|</span>
             <a href="#about">About Us</a>
             <span>|</span>
             <a href="#contact">Contact Us</a>

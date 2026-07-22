@@ -12,6 +12,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
+        /* Smooth Scrolling for Anchor Links */
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* ===== MAIN APPLICATION STYLES ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
@@ -74,6 +79,7 @@
             border: 1px solid #1e293b;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            scroll-margin-top: 20px; /* Offset for smooth scroll landing */
         }
 
         .info-card h2 { margin-top: 0; font-size: 22px; font-weight: 600; color: #38bdf8; border-bottom: 1px solid #1e293b; padding-bottom: 12px; margin-bottom: 15px; text-align: left; }
@@ -88,9 +94,39 @@
         .email-box a { color: #38bdf8; text-decoration: none; font-weight: 600; font-size: 14px; }
         .email-box a:hover { text-decoration: underline; }
 
-        .footer-copyright {
-            margin-top: 30px;
+        /* FOOTER NAVIGATION & COPYRIGHT */
+        footer {
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 40px;
+            padding: 25px 20px;
             text-align: center;
+            border-top: 1px solid #1e293b;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .footer-nav a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+
+        .footer-copyright {
             color: #64748b;
             font-size: 14px;
         }
@@ -167,11 +203,11 @@
         </div>
     </div>
 
-    <!-- VISIBLE CONTENT SECTIONS -->
+    <!-- VISIBLE CONTENT SECTIONS WITH ID FOR SMOOTH SCROLLING -->
     <div class="info-sections-container">
 
         <!-- A. About Us -->
-        <div class="info-card">
+        <div class="info-card" id="about">
             <h2>About Us</h2>
             <p><strong>Welcome to MAKAR7 – Passport Photo Maker</strong></p>
             <p>MAKAR7 is a free online passport photo maker designed to help users create high-quality passport photos quickly and easily. Our goal is to provide a simple, reliable, and user-friendly tool that works directly in your web browser without requiring complicated software.</p>
@@ -180,7 +216,7 @@
         </div>
 
         <!-- B. Contact Us -->
-        <div class="info-card">
+        <div class="info-card" id="contact">
             <h2>Contact MAKAR7 Support</h2>
             <p>Thank you for visiting MAKAR7 – Passport Photo Maker.</p>
             <p>We value your feedback and are always happy to assist you. If you have any questions, suggestions, or need support while using our passport photo maker, please contact us.</p>
@@ -193,7 +229,7 @@
         </div>
 
         <!-- C. Privacy Policy -->
-        <div class="info-card">
+        <div class="info-card" id="privacy">
             <h2>Privacy Policy</h2>
             <p class="last-updated">Last Updated: July 22, 2026</p>
             <p>Welcome to MAKAR7 – Passport Photo Maker. Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you use our website.</p>
@@ -235,7 +271,7 @@
         </div>
 
         <!-- D. Terms & Conditions -->
-        <div class="info-card">
+        <div class="info-card" id="terms">
             <h2>Terms & Conditions</h2>
             <p class="last-updated">Last Updated: July 22, 2026</p>
             <p>Welcome to MAKAR7 – Passport Photo Maker. By accessing or using this website, you agree to comply with these Terms & Conditions.</p>
@@ -261,9 +297,21 @@
 
     </div>
 
-    <div class="footer-copyright">
-        <p>&copy; 2026 MAKAR7. All rights reserved.</p>
-    </div>
+    <!-- FOOTER WITH NAVIGATION LINKS -->
+    <footer>
+        <div class="footer-nav">
+            <a href="#about">About Us</a>
+            <span>|</span>
+            <a href="#contact">Contact Us</a>
+            <span>|</span>
+            <a href="#privacy">Privacy Policy</a>
+            <span>|</span>
+            <a href="#terms">Terms & Conditions</a>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2026 MAKAR7. All rights reserved.</p>
+        </div>
+    </footer>
 
     <!-- ULTRA HD ENGINE JAVASCRIPT -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
@@ -293,7 +341,7 @@
                 canvas.width = 4960;  // Ultra HD A4
                 canvas.height = 7016; 
             }
-            
+
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = "high";
 
